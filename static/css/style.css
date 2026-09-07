@@ -20,6 +20,15 @@ body {
     color: var(--ink);
     background-color: var(--paper);
     line-height: 1.6;
+    /* Overlay gelap ditumpuk di atas gambar background lensa kamera,
+       supaya teksturnya tetap kelihatan tapi tidak mengganggu keterbacaan teks */
+    background-image:
+        linear-gradient(rgba(10, 10, 11, 0.65), rgba(10, 10, 11, 0.65)),
+        url('/static/img/background/lens.svg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
 h1, .brand {
@@ -32,11 +41,15 @@ h1, .brand {
     padding: 0 1.5rem;
 }
 
+/* ============================================
+                    HEADER
+   ============================================ */
 .site-header {
     border-bottom: 1px solid var(--line);
     background-color: var(--paper);
 }
 
+/* Garis titik-titik di bawah header */
 .site-header::after {
     content: "";
     display: block;
@@ -97,6 +110,9 @@ h1, .brand {
     width: 100%;
 }
 
+/* ============================================
+   HERO / SECTION PROFILE
+   ============================================ */
 .hero {
     padding: 4.5rem 0 5rem;
 }
@@ -132,6 +148,7 @@ h1, .brand {
     gap: 0.5rem;
 }
 
+/* Titik bulat kecil di sebelah kicker, berkedip pelan seperti lampu indikator "REC" */
 .hero-kicker::before {
     content: "";
     width: 8px;
@@ -152,6 +169,7 @@ h1, .brand {
     color: var(--ink);
 }
 
+/* garis vertikal filmstrip*/
 .bio {
     color: var(--text-muted);
     max-width: 420px;
@@ -160,6 +178,7 @@ h1, .brand {
     border-left: 2px solid var(--accent);
 }
 
+/* Kotak abu-abu berisi NPM & Program studi, dengan efek timbul saat hover kursor */
 .meta-list {
     display: flex;
     gap: 2.5rem;
@@ -195,6 +214,7 @@ h1, .brand {
     flex-wrap: wrap;
 }
 
+/* Tombol sosial media berbentuk lingkaran*/
 .social-link {
     display: flex;
     align-items: center;
@@ -214,17 +234,22 @@ h1, .brand {
     filter: invert(1);
 }
 
+/* Saat hover warna berubah jadi merah, tombol naik dan sedikit berputar*/
 .social-link:hover {
     background-color: var(--accent);
     transform: translateY(-3px) rotate(-8deg);
     box-shadow: 0 5px 0 rgba(0, 0, 0, 0.5);
 }
 
+/* Saat diklik tonbol turun meniru tombol fisik yang ditekan */
 .social-link:active {
     transform: translateY(1px);
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
+/* ============================================
+    FOTO PROFIL dibingkai seperti viewfinder kamera
+    ============================================ */
 .hero-photo {
     grid-area: photo;
     align-self: start;
