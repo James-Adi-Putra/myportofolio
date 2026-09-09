@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>James - Portfolio</title>
+    <title>{{ name }} - Portofolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -12,10 +12,10 @@
 <body>
     <header class="site-header">
         <div class="container">
-            <a href="#profile" class="brand">James</a>
+            <a href="{% url 'main:show_main' %}" class="brand">{{ brand_name }}</a>
             <nav>
-                <a href="#profile">Profile</a>
-                <a href="#experience">Experience</a>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
     </header>
@@ -25,22 +25,22 @@
             <div class="container hero-grid">
                 <div class="hero-identity">
                     <p class="hero-kicker">Computer Science &middot; Universitas Indonesia</p>
-                    <h1>James Adi Putra</h1>
+                    <h1>{{ name }}</h1>
                 </div>
                 <div class="hero-photo">
                     <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/James.svg" alt="Photo of James">
+                    <img class="avatar" src="/static/img/James.svg" alt="Photo of {{ name }}">
                 </div>
                 <div class="hero-details">
-                    <p class="bio">Hi, my name is James Adi Putra. You can call me James. I'm an Information Systems student at the University of Indonesia with a strong interest in exploring the field of cybersecurity. My goal is to develop the knowledge and skills needed to protect IT products and systems from potential threats.</p>
+                    <p class="bio">{{ bio }}</p>
                     <dl class="meta-list">
                         <div class="meta-row">
                             <dt>NPM</dt>
-                            <dd>2506624644</dd>
+                            <dd>{{ npm }}</dd>
                         </div>
                         <div class="meta-row">
                             <dt>Program</dt>
-                            <dd>S1 Sistem Informasi</dd>
+                            <dd>{{ study_program }}</dd>
                         </div>
                     </dl>
                     <div class="social-links">
@@ -60,94 +60,12 @@
                 </div>
             </div>
         </section>
-
-        <section class="experience" id="experience">
-            <div class="container">
-                <h2 class="section-title">Experience</h2>
-                <p class="section-subtitle">Every frame tells a story — Tap or click a photo to view it up close!</p>
-
-                <div class="experience-scroll">
-                    <article class="exp-card">
-                        <a href="#exp-photo-1" class="exp-photo-link">
-                            <img src="/static/img/mentor.svg" alt="Foto saat menjadi mentor PSAF" class="exp-photo">
-                        </a>
-                        <div class="exp-body">
-                            <h3>Mentor PSAF Fasilkom</h3>
-                            <p>Berpartisipasi menjadi mentor pengenalan kampus bagi mahasiswa baru Fasilkom. Berperan mengajarkan budaya dan informasi awal perkuliahan di Fasilkom UI</p>
-                        </div>
-                    </article>
-
-                    <article class="exp-card">
-                        <a href="#exp-photo-2" class="exp-photo-link">
-                            <img src="/static/img/vpic-dnc.svg" alt="Foto saat menjadi VPIC DnC" class="exp-photo">
-                        </a>
-                        <div class="exp-body">
-                            <h3>VPIC DnC OH26</h3>
-                            <p>Memimpin divisi DnC Open House Fasilkom 2026, divisi ini bertugas untuk membuat movie dan dokumentasi segala kegiatan yang ada di Open House Fasilkom UI 2026.</p>
-                        </div>
-                    </article>
-
-                    <article class="exp-card">
-                        <a href="#exp-photo-3" class="exp-photo-link">
-                            <img src="/static/img/Psdm.svg" alt="Foto saat menjalankan proker PSDM" class="exp-photo">
-                        </a>
-                        <div class="exp-body">
-                            <h3>Staff PSDM KMK Fasilkom</h3>
-                            <p>Melakukan program kerja sebagai Staff PSDM KMK Fasilkom UI, dengan menghadiri wisuda untuk mengucapkan semangat kepada Kating KMK yang lulus</p>
-                        </div>
-                    </article>
-
-                    <article class="exp-card">
-                        <a href="#exp-photo-4" class="exp-photo-link">
-                            <img src="/static/img/sospro.svg" alt="Foto saat menjalankan project sosial saat maba" class="exp-photo">
-                        </a>
-                        <div class="exp-body">
-                            <h3>Sospro</h3>
-                            <p>Melakukan social project saat menjadi mahasiswa baru Fasilkom UI dengan mengunjungi panti asuhan dan memberikan pelatihan cara menggunakan canva serta pengggunaan Ai</p>
-                        </div>
-                    </article>
-
-                    <article class="exp-card">
-                        <a href="#exp-photo-5" class="exp-photo-link">
-                            <img src="/static/img/yearbook.svg" alt="Foto saat menjadi Ketua Yearbook Angkatan Sekolah" class="exp-photo">
-                        </a>
-                        <div class="exp-body">
-                            <h3>Ketua Yearbook SMA</h3>
-                            <p>Menjadi Ketua Yearbook untuk angkatan saat SMA. Menjalin kerjasama dengan vendor dan membuat video angkatan untuk perpisahan angkatan saat SMA</p>
-                        </div>
-                    </article>
-
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer class="site-footer">
         <div class="container">
-            <p>&copy; 2026 James. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+            <p>&copy; 2026 {{ brand_name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
     </footer>
-
-    <div class="lightbox" id="exp-photo-1">
-        <a href="#experience" class="lightbox-close">&times;</a>
-        <img src="/static/img/mentor.svg" alt="Foto mentor (besar)">
-    </div>
-    <div class="lightbox" id="exp-photo-2">
-        <a href="#experience" class="lightbox-close">&times;</a>
-        <img src="/static/img/vpic-dnc.svg" alt="Foto VPIC Dnc (besar)">
-    </div>
-    <div class="lightbox" id="exp-photo-3">
-        <a href="#experience" class="lightbox-close">&times;</a>
-        <img src="/static/img/Psdm.svg" alt="Foto Staff PSDM (besar)">
-    </div>
-    <div class="lightbox" id="exp-photo-4">
-        <a href="#experience" class="lightbox-close">&times;</a>
-        <img src="/static/img/sospro.svg" alt="Foto Social Project (besar)">
-    </div>
-    <div class="lightbox" id="exp-photo-5">
-        <a href="#experience" class="lightbox-close">&times;</a>
-        <img src="/static/img/yearbook.svg" alt="Foto Ketua Yearbook (besar)">
-    </div>
-
 </body>
 </html>

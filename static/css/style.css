@@ -378,12 +378,12 @@ h1, .brand {
 }
 
 /* ===== Section Experience ===== */
-.experience {
+.experience-section {
     position: relative;
     padding: 5rem 0 5rem;
 }
 
-.experience::before {
+.experience-section::before {
     content: "";
     display: block;
     position: absolute;
@@ -399,9 +399,17 @@ h1, .brand {
     background-repeat: no-repeat, repeat-x;
 }
 
+.section-kicker {
+    color: var(--accent-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 .section-title {
+    margin: 0.4rem 0 0.5rem;
     font-size: clamp(2rem, 5vw, 2.75rem);
-    margin-bottom: 0.5rem;
     color: var(--ink);
     font-family: "Space Grotesk", -apple-system, sans-serif;
     font-weight: 700;
@@ -417,7 +425,7 @@ h1, .brand {
     letter-spacing: 0.02em;
 }
 
-.experience-scroll {
+.experience-grid {
     display: flex;
     gap: 1.5rem;
     overflow-x: auto;
@@ -428,21 +436,21 @@ h1, .brand {
     scrollbar-color: var(--accent) var(--line);
 }
 
-.experience-scroll::-webkit-scrollbar {
+.experience-grid::-webkit-scrollbar {
     height: 8px;
 }
 
-.experience-scroll::-webkit-scrollbar-track {
+.experience-grid::-webkit-scrollbar-track {
     background: var(--line);
     border-radius: var(--radius);
 }
 
-.experience-scroll::-webkit-scrollbar-thumb {
+.experience-grid::-webkit-scrollbar-thumb {
     background-color: var(--accent);
     border-radius: var(--radius);
 }
 
-.exp-card {
+.experience-card {
     flex: 0 0 260px;
     scroll-snap-align: start;
     background-color: var(--paper-alt);
@@ -454,7 +462,7 @@ h1, .brand {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.exp-card:hover {
+.experience-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
 }
@@ -479,14 +487,33 @@ h1, .brand {
     color: var(--ink);
 }
 
-.exp-body h3 {
+.experience-category {
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.exp-body h2 {
     font-family: "Space Grotesk", -apple-system, sans-serif;
     font-size: 1.1rem;
 }
 
-.exp-body p {
+.experience-description {
     color: var(--text-muted);
     font-size: 0.9rem;
+}
+
+.experience-status {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.empty-state {
+    color: var(--text-muted);
 }
 
 /* ===== Lightbox (klik gambar untuk perbesar) ===== */
@@ -527,7 +554,7 @@ h1, .brand {
 
 /* ===== Responsive Experience Section ===== */
 @media (max-width: 600px) {
-    .exp-card {
+    .experience-card {
         flex: 0 0 220px;
     }
 
