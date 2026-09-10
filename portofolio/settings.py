@@ -33,6 +33,12 @@ SECRET_KEY = 'django-insecure-fhjx)opu%$$p4bs!*g&y=2@xv355(vcz@k-&^$ecmzg2gt2+y#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+
+CSRF_TRUSTED_ORIGINS= ["https://james-adi-myportofolio.pws.cs.ui.ac.id"]
+
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "james-adi-myportofolio.pws.cs.ui.ac.id"]
 
 
