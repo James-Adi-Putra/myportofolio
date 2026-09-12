@@ -593,31 +593,6 @@ h1, .brand {
     padding-left: 74px;
 }
 
-.education-timeline::before {
-    content: "";
-    position: absolute;
-    left: 30px;
-    bottom: 8px;
-    top: 8px;
-    width: 2px;
-    background-color: var(--line);
-}
-
-.education-timeline::after {
-    content: "";
-    position: absolute;
-    left: 30px;
-    bottom: 8px;
-    width: 2px;
-    background-color: var(--accent);
-    animation: exposure-rise 2.2s ease-out both;
-}
-
-@keyframes exposure-rise {
-    from { height: 0%; }
-    to { height: 100%; }
-}
-
 .edu-frame {
     position: relative;
     display: flex;
@@ -637,6 +612,24 @@ h1, .brand {
 .edu-frame:nth-child(3) { animation-delay: 1.7s; }
 .edu-frame:nth-child(4) { animation-delay: 2.4s; }
 .edu-frame:nth-child(5) { animation-delay: 3.1s; }
+
+/* Garis penghubung antar kartu, berhenti sebelum kartu terakhir (paling atas) */
+.edu-frame:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: -46px;
+    top: 60px;
+    width: 2px;
+    height: calc(100% + 2.25rem - 60px);
+    background-color: var(--accent);
+    animation: segment-grow 0.6s ease-out 0.2s both;
+    transform-origin: top;
+}
+
+@keyframes segment-grow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
 
 .edu-logo-frame {
     position: absolute;
