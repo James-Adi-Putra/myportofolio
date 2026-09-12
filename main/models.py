@@ -26,3 +26,25 @@ class Experience(models.Model):
     @property
     def is_ongoing(self):
         return self.ended_at is None
+
+class Education(models.Model):
+    EDUCATION_CHOICES = [
+        ('junior_high', 'Junior High School'),
+        ('senior_high', 'Senior High School'),
+        ('university', 'Undergraduate Student'),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    institution = models.CharField(max_length=255)
+    degree = models.CharField(max_length=255)
+    level = models.CharField(max_length=20, choices=EDUCATION_CHOICES, default='university')
+    logo = models.CharField(max_length=255, blank=True, null=True, help_text="Nama file logo di static/img/, contoh: ui-logo.svg")
+    started_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.institution
+
+    @property
+    def is_ongoing(self):
+        return self.ended_at is None
