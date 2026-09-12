@@ -622,9 +622,16 @@ h1, .brand {
     width: 2px;
     height: calc(100% + 2.25rem - 60px);
     background-color: var(--accent);
-    animation: segment-grow 0.6s ease-out 0.2s both;
     transform-origin: top;
+    transform: scaleY(0);
+    animation: segment-grow 0.6s ease-out both;
 }
+
+/* Delay tiap garis*/
+.edu-frame:nth-child(1)::after { animation-delay: 0.8s; }
+.edu-frame:nth-child(2)::after { animation-delay: 1.5s; }
+.edu-frame:nth-child(3)::after { animation-delay: 2.2s; }
+.edu-frame:nth-child(4)::after { animation-delay: 2.9s; }
 
 @keyframes segment-grow {
     from { transform: scaleY(0); }
