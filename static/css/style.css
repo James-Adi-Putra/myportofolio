@@ -649,6 +649,7 @@ h1, .brand {
     flex-shrink: 0;
     background-color: var(--paper-alt);
     animation: aperture-reveal 0.7s ease-out 0.5s both;
+    z-index: 2;
 }
 
 .edu-logo-frame img {
