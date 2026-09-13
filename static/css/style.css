@@ -421,12 +421,17 @@ h1, .brand {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .experience-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+    border-color: var(--accent);
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(214, 71, 44, 0.3),
+        0 0 16px 2px rgba(214, 71, 44, 0.25),
+        0 0 32px 6px rgba(214, 71, 44, 0.12);
 }
 
 .exp-photo-link {
