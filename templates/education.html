@@ -45,7 +45,13 @@
                             {% else %}
                             <p class="edu-status">Selesai</p>
                             {% endif %}
+                            {% if education.description %}
+                            <p class="edu-description">{{ education.description }}</p>
+                            {% endif %}
                         </div>
+                        {% if not forloop.last %}
+                        <div class="edu-connector"></div>
+                        {% endif %}
                     </div>
                     {% empty %}
                     <p class="empty-state">Belum ada riwayat pendidikan yang ditambahkan.</p>
