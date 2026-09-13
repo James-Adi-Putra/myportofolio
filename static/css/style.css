@@ -413,7 +413,7 @@ h1, .brand {
 }
 
 .experience-card {
-    flex: 0 0 260px;
+    flex: 0 0 300px;
     scroll-snap-align: start;
     background-color: var(--paper-alt);
     border: 1px solid var(--line);
