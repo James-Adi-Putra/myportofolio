@@ -710,7 +710,7 @@ h1, .brand {
 
     /*foto mengecil dan ke tengah*/
     .hero-photo {
-        max-width: 220px;
+        max-width: 260px;
         justify-self: center;
         margin-top: 0;
     }

@@ -27,3 +27,24 @@ Saya memberi feedback spesifik setiap kali hasil AI kurang sesuai (misalnya bing
 4. Mencari background yang cocok untuk background website saya di pencarian aset dan foto untuk mendapatkan aset yang saya mau
 **Refleksi proses:**
 Saya mengerjakan tugas 1 ini untuk melanjutkan section dari web porto saya disini saya belajar dalam penggunaan semantik di html dan membuat card experience dengan html sendiri tetap untuk bagian css memang saya masih tidak terlepas dengan bantuan AI meskipun brainstorming dan desain yang desain saya tapi implementasi tetap beberapa css saya dibantu oleh AI. Dari pengerjaan tugas ini saya sudah berhasil implementasi section experience meski mungkin ada beberapa fitur yang belum sempurna karena saya tertarik dengan pembuatan web jadi saya sebisanya untuk mencoba terlebih dahulu sendiri mengacak acak code nya. Dari tugas ini saya makin yakin PBP sepertinya akan seru untuk semester ini buat saya karena saya merasa fun untuk melakukan desain dan implementasi web dalam waktu yang lama disini.
+
+
+### Tugas 2
+1. Alur dimulai saat browser mengirim request ke URL `/education/`, yang diteruskan dari `portofolio/urls.py` ke `main/urls.py`hingga memanggil fungsi show_education di `main/views.py`. View ini kemudian mengambil seluruh data Education dari database, menyimpannya dalam context, dan merendernya bersama template education.html. Akhirnya, Django memproses perulangan objek di template menjadi elemen HTML utuh yang dikirimkan kembali sebagai response ke browser.
+2.  Karena kemudahan pemeliharaan jadi kalau ada info yang berubah (misalnya status "Sedang berlangsung" menjadi "Selesai"), saya cukup mengubah satu baris data di database (lewat Django Admin), tanpa perlu mengedit dan mencari-cari di file HTML. Lalu konsistensi, karena data dari model dipakai lewat perulangan `{% for %}`, jumlah entri bisa bertambah atau berkurang tanpa perlu menulis ulang blok HTML baru setiap kali. Selain itu menurut saya template hanya mengatur tampilan, sedangkan model dan database mengatur isi data yang sesungguhnya, sehingga kalau nanti saya mau menambah fitur (misalnya filter atau pencarian riwayat pendidikan), ya saya tinggal menyesuaikan view dan query, tanpa perlu mengubah struktur template.
+3. `makemigrations` membuat berkas migrasi baru yang mencatat perubahan yang saya buat di `models.py` tapi belum benar-benar menerapkan perubahan itu ke database. Sedangkan `migrate` adalah perintah yang benar-benar mengeksekusi berkas migrasi tersebut, sehingga struktur di database (SQLite di lokal, atau PostgreSQL di production) benar-benar berubah sesuai definisi model terbaru. Contoh nyata yang saya alami jadi waktu saya menambahkan field `description` ke model `Education` untuk menyimpan cerita singkat tiap institusi edukasi saya, saya sempat lupa menjalankan `makemigrations` dan `migrate` terlebih dahulu, sehingga muncul error `no such column: main_education.description` saat mencoba mengakses halaman Education. Setelah menjalankan kedua perintah tersebut secara berurutan, field baru itu baru benar-benar tersedia di database dan halaman bisa diakses tanpa error
+
+## AI Disclosure
+Saya menggunakan Claude (Anthropic) sebagai bantuan dalam beberapa bagian tugas ini, dengan rincian sebagai berikut:
+1. Debugging error migrasi database, static files di production, dan konfigurasi environment variables
+2. Bantuan menyusun struktur CSS untuk section Education, termasuk penyesuaian dari desain awal saya ke pola MVT yang diajarkan tutorial saya melemparkan sebuah desain untuk diimplementasikan code CSS nya yaitu roadmap perjalanan dan animasi munculnya
+3. Bantuan penambahan CSS pada section Experience bagian card untuk membuat tampilan bersinar saat di hover kursor
+4. Diskusi dan penjelasan konsep MVT, routing, migrasi model, saat saya menyesuaikan model Education dengan kebutuhan saya sendiri
+**Strategi prompting:**
+Saya meminta bantuan untuk desain css dari section education lalu saya melemparkan beberapa pertanyaan terkait tugas kali ini berupa konsep MVT dan migrasi serta database django admin untuk penggunaannya seperti apa. Saya juga meminta desain saya untuk divisualisasikan terlebih dahulu sebelum AI melakukan coding css section education. Terdapat beberapa bug yang terjadi sehingga aku mencoba aktif bertanya balik untuk cara mengatasi bug yang terjadi dan memberikan masukan ku untuk memperbaiki bug.
+**Bagian yang murni dikerjakan sendiri:**
+1. menentukan konten pribadi (bio, riwayat pendidikan, pengalaman organisasi)
+2. Membuat desain mentah css bagian education lalu melempar gambar desain mentah ke AI untuk diimplementasikan
+3. pengambilan keputusan desain visual dan tema yaitu merubah opasity latar belakang
+4. Melakukan penyesuaian terhadap lebar kotak experience di tampilan Desktop maupun tampilan HP
+5. Pengujian manual di browser dan HP menggunakan inspect untuk test performance 
