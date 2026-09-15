@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Experience, Education
+from .models import Experience, Education, Project
 
 @admin.register(Experience)
 class ExperienceAdmin(admin.ModelAdmin):
@@ -14,3 +14,8 @@ class EducationAdmin(admin.ModelAdmin):
     list_filter = ('level',)
     search_fields = ('institution', 'degree')
     ordering = ('-started_at',)
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('title', 'skills_used')
+    search_fields = ('title', 'description')

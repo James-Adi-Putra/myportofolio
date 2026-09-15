@@ -12,7 +12,9 @@
     --accent-dark: #a8341f;
     --line: #2b2b2c;
     --text-muted: #97958f;
+    --text-faint: #b8b6b0;
     --radius: 3px;
+    --danger: #e5484d;
 }
 
 body {
@@ -47,7 +49,6 @@ h1, .brand {
     background-color: var(--paper);
 }
 
-/* Garis titik-titik di bawah header */
 .site-header::after {
     content: "";
     display: block;
@@ -109,7 +110,90 @@ h1, .brand {
 }
 
 /* ============================================
-   HERO / SECTION PROFILE
+   SECTION HEADING ini dipakai bersama untuk Experience, Education, Projects)
+   ============================================ */
+.section-kicker {
+    display: block;
+    color: var(--accent-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.section-title {
+    margin: 0 0 0.5rem;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    color: var(--ink);
+    font-family: "Space Grotesk", -apple-system, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+}
+
+.section-subtitle {
+    color: var(--ink);
+    opacity: 0.6;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    font-family: "Space Grotesk", -apple-system, sans-serif;
+    letter-spacing: 0.02em;
+}
+
+.empty-state {
+    color: var(--text-muted);
+}
+
+/* ============================================
+            BUTTONS dipakai bersama juga
+   ============================================ */
+.button {
+    display: inline-block;
+    height: fit-content;
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    background: var(--accent);
+    color: var(--paper);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    transition: filter 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.button:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 12px rgba(214, 71, 44, 0.35);
+}
+
+.button-secondary {
+    background: var(--paper-alt);
+    border: 1px solid var(--line);
+    color: var(--ink);
+}
+
+.button-secondary:hover {
+    filter: none;
+    box-shadow: none;
+    background: var(--line);
+}
+
+.button-danger {
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+
+.button-danger:hover {
+    filter: none;
+    box-shadow: none;
+    background: rgba(229, 72, 77, 0.15);
+}
+
+/* ============================================
+                HERO / SECTION PROFILE
    ============================================ */
 .hero {
     padding: 4.5rem 0 5rem;
@@ -146,7 +230,6 @@ h1, .brand {
     gap: 0.5rem;
 }
 
-/* Titik bulat kecil di sebelah kicker, berkedip pelan seperti lampu indikator "REC" */
 .hero-kicker::before {
     content: "";
     width: 8px;
@@ -167,7 +250,6 @@ h1, .brand {
     color: var(--ink);
 }
 
-/* garis vertikal filmstrip*/
 .bio {
     color: var(--text-muted);
     max-width: 420px;
@@ -176,7 +258,6 @@ h1, .brand {
     border-left: 2px solid var(--accent);
 }
 
-/* Kotak abu-abu berisi NPM & Program studi, dengan efek timbul saat hover kursor */
 .meta-list {
     display: flex;
     gap: 2.5rem;
@@ -212,7 +293,6 @@ h1, .brand {
     flex-wrap: wrap;
 }
 
-/* Tombol sosial media berbentuk lingkaran*/
 .social-link {
     display: flex;
     align-items: center;
@@ -232,22 +312,17 @@ h1, .brand {
     filter: invert(1);
 }
 
-/* Saat hover warna berubah jadi merah, tombol naik dan sedikit berputar*/
 .social-link:hover {
     background-color: var(--accent);
     transform: translateY(-3px) rotate(-8deg);
     box-shadow: 0 5px 0 rgba(0, 0, 0, 0.5);
 }
 
-/* Saat diklik tonbol turun meniru tombol fisik yang ditekan */
 .social-link:active {
     transform: translateY(1px);
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
-/* ============================================
-    FOTO PROFIL dibingkai seperti viewfinder kamera
-    ============================================ */
 .hero-photo {
     grid-area: photo;
     align-self: start;
@@ -289,9 +364,7 @@ h1, .brand {
     left: 1.1rem;
     width: calc(100% - 2.2rem);
     height: calc(100% - 2.2rem);
-    background-color: transparent;
     border: 1px solid var(--line);
-    border-radius: 0;
     z-index: 0;
 }
 
@@ -332,7 +405,6 @@ h1, .brand {
     aspect-ratio: 1 / 1;
     transition: filter 0.3s ease, transform 0.4s ease;
     object-fit: cover;
-    border-radius: 0;
     border: 1px solid var(--line);
     filter: grayscale(0.25) contrast(1.08) brightness(0.96);
     animation: aperture-reveal 0.9s ease-out;
@@ -348,6 +420,9 @@ h1, .brand {
     transform: scale(1.04);
 }
 
+/* ============================================
+                    FOOTER
+   ============================================ */
 .site-footer {
     padding: 1.5rem;
     color: var(--text-muted);
@@ -355,36 +430,53 @@ h1, .brand {
     border-top: 1px solid var(--line);
 }
 
-/* ===== Section Experience ===== */
+/* ============================================
+   CARD (dasar dipakai bersama: Experience & Projects)
+   ============================================ */
+.experience-card {
+    background-color: var(--paper-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.experience-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.45),
+        0 0 16px 2px rgba(214, 71, 44, 0.2);
+}
+
+.experience-category {
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.experience-description {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.experience-status {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* ============================================
+   SECTION: EXPERIENCE
+   ============================================ */
 .experience-section {
     position: relative;
     padding: 5rem 0 5rem;
-}
-
-.section-kicker {
-    color: var(--accent-dark);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.section-title {
-    margin: 0.4rem 0 0.5rem;
-    font-size: clamp(2rem, 5vw, 2.75rem);
-    color: var(--ink);
-    font-family: "Space Grotesk", -apple-system, sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-}
-
-.section-subtitle {
-    color: var(--ink);
-    opacity: 0.6;
-    font-size: 0.95rem;
-    margin-bottom: 2rem;
-    font-family: "Space Grotesk", -apple-system, sans-serif;
-    letter-spacing: 0.02em;
 }
 
 .experience-grid {
@@ -412,26 +504,9 @@ h1, .brand {
     border-radius: var(--radius);
 }
 
-.experience-card {
+.experience-grid .experience-card {
     flex: 0 0 300px;
     scroll-snap-align: start;
-    background-color: var(--paper-alt);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.experience-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent);
-    box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.45),
-        0 0 0 1px rgba(214, 71, 44, 0.3),
-        0 0 16px 2px rgba(214, 71, 44, 0.25),
-        0 0 32px 6px rgba(214, 71, 44, 0.12);
 }
 
 .exp-photo-link {
@@ -454,36 +529,12 @@ h1, .brand {
     color: var(--ink);
 }
 
-.experience-category {
-    color: var(--accent);
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
 .exp-body h2 {
     font-family: "Space Grotesk", -apple-system, sans-serif;
     font-size: 1.1rem;
 }
 
-.experience-description {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.experience-status {
-    margin-top: 0.25rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--accent);
-}
-
-.empty-state {
-    color: var(--text-muted);
-}
-
-/* ===== Lightbox (klik gambar untuk perbesar) ===== */
+/* Lightbox (klik gambar untuk perbesar) */
 .lightbox {
     display: none;
     position: fixed;
@@ -519,7 +570,9 @@ h1, .brand {
     line-height: 1;
 }
 
-/* ===== Section Education ===== */
+/* ============================================
+   SECTION: EDUCATION
+   ============================================ */
 .education-section {
     position: relative;
     padding: 5rem 0 5rem;
@@ -583,7 +636,6 @@ h1, .brand {
     to { transform: scaleY(1); }
 }
 
-/* Bingkai logo institusi, meniru bingkai negatif film dengan sudut bracket */
 .edu-logo-frame {
     position: absolute;
     left: -96px;
@@ -678,15 +730,253 @@ h1, .brand {
 }
 
 /* ============================================
-   RESPONSIVE - Media
+   SECTION: PROJECTS
+   ============================================ */
+.project-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.project-header .section-title {
+    margin-bottom: 0;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem;
+}
+
+.project-grid .experience-card {
+    padding: 0;
+}
+
+.project-image-wrap {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+}
+
+.project-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.project-grid .experience-card:hover .project-image {
+    transform: scale(1.05);
+}
+
+.project-grid .experience-card > h2,
+.project-grid .experience-card > .experience-category,
+.project-grid .experience-card > .experience-description,
+.project-grid .experience-card > .project-card-actions {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+}
+
+.project-grid .experience-card > h2 {
+    margin-top: 1.25rem;
+    font-family: "Space Grotesk", -apple-system, sans-serif;
+    font-size: 1.1rem;
+}
+
+.project-grid .experience-card > .experience-category {
+    color: var(--text-faint);
+}
+
+.project-grid .experience-card > .project-card-actions {
+    padding-bottom: 1.25rem;
+}
+
+.project-add-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.project-add-button span {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.project-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 1.25rem;
+}
+
+.project-actions .button {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.project-actions .experience-status {
+    margin-top: 0;
+}
+
+.project-card-actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+}
+
+.project-search {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.project-search__input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.7rem;
+    background-color: var(--paper-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink);
+    font: inherit;
+}
+
+.project-search__input:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+}
+
+/* Hapus Project */
+.project-delete-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 1rem;
+    border: 0;
+    background: transparent;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-delete-modal:popover-open {
+    display: flex;
+}
+
+.project-delete-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.7);
+    cursor: default;
+}
+
+.project-delete-modal__content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 480px);
+    padding: 1.5rem;
+    background: var(--paper-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+}
+
+.project-delete-modal__content h2 {
+    margin: 0 0 0.75rem;
+    font-family: "Space Grotesk", -apple-system, sans-serif;
+    font-size: 1.5rem;
+    color: var(--ink);
+}
+
+.project-delete-modal__content p {
+    color: var(--text-muted);
+}
+
+.project-delete-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.project-delete-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+/* ============================================
+                PROJECT FORM
+   ============================================ */
+.project-form {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: var(--paper-alt);
+    color: var(--ink);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    font: inherit;
+    transition: border-color 0.2s ease, outline-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+}
+
+.form-error {
+    color: #ff6b5a;
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+}
+
+/* ============================================
+   RESPONSIVE (max-width: 600px)
    ============================================ */
 @media (max-width: 600px) {
-    /*background tidak fixed di mobile*/
     body {
         background-attachment: scroll;
     }
 
-    /*navbar jadi vertikal*/
     .site-header .container {
         flex-direction: column;
         align-items: flex-start;
@@ -699,7 +989,6 @@ h1, .brand {
         flex-wrap: wrap;
     }
 
-    /*profil jadi 1 kolom*/
     .hero-grid {
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -708,29 +997,24 @@ h1, .brand {
             "details";
     }
 
-    /*foto mengecil dan ke tengah*/
     .hero-photo {
         max-width: 260px;
         justify-self: center;
         margin-top: 0;
     }
 
-    /*rata kiri*/
     .social-links {
         justify-content: flex-start;
     }
 
-    /*kartu experience mengecil*/
-    .experience-card {
-        flex: 0 0 220px;
-    }
-
-    /*judul section mengecil*/
     .section-title {
         font-size: 2rem;
     }
 
-    /*timeline & logo pendidikan mengecil*/
+    .experience-grid .experience-card {
+        flex: 0 0 220px;
+    }
+
     .education-timeline {
         padding-left: 74px;
     }
@@ -747,5 +1031,47 @@ h1, .brand {
 
     .edu-body h2 {
         font-size: 1.2rem;
+    }
+
+    .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .project-add-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .project-search {
+    flex-direction: column;
+    }
+
+    .project-search .button {
+        width: 100%;
+    }
+
+    .project-delete-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .project-delete-modal__content {
+        width: 100%;
+        padding: 1.25rem;
+        border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .project-delete-modal__actions {
+        flex-direction: column-reverse;
+    }
+
+    .project-delete-modal__actions .button {
+        width: 100%;
+        text-align: center;
     }
 }
