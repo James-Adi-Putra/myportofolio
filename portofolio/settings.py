@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
+PORTFOLIO_SECRET = os.getenv('PORTFOLIO_SECRET', '')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

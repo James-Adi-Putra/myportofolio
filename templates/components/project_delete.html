@@ -29,15 +29,23 @@
             Apakah Anda yakin ingin menghapus
             <strong>{{ project.title }}</strong>?
         </p>
-        <div class="project-delete-modal__actions">
-            <button type="button"
-                    class="button button-secondary"
-                    popovertarget="delete-project-{{ project.id }}"
-                    popovertargetaction="hide">Batal</button>
-            <form method="post" action="{% url 'main:delete_project' project.id %}">
-                {% csrf_token %}
+        <form method="post" action="{% url 'main:delete_project' project.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="delete-password-{{ project.id }}">Kode Rahasia</label>
+                <input type="password"
+                       name="password"
+                       id="delete-password-{{ project.id }}"
+                       placeholder="Masukkan kode rahasia"
+                       required>
+            </div>
+            <div class="project-delete-modal__actions">
+                <button type="button"
+                        class="button button-secondary"
+                        popovertarget="delete-project-{{ project.id }}"
+                        popovertargetaction="hide">Batal</button>
                 <button type="submit" class="button button-danger">Ya, Hapus</button>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>

@@ -1,7 +1,14 @@
+from django import forms
 from django.forms import ModelForm, TextInput, Textarea, URLInput
 from main.models import Project
 
 class ProjectForm(ModelForm):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Masukkan kode rahasia"}),
+        label="Kode Rahasia",
+        required=True,
+    )
+
     class Meta:
         model = Project
         fields = [
@@ -45,7 +52,7 @@ class ProjectForm(ModelForm):
             ),
             "project_image_url": URLInput(
                 attrs={
-                    "placeholder": "https://drive.google.com/",
+                    "placeholder": "https://drive.google.com",
                 }
             ),
         }

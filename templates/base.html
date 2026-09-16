@@ -23,12 +23,12 @@
         </div>
     </header>
 
-    {% block content %} {% endblock content %}
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+        <p class="alert alert-{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
 
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
-        </div>
-    </footer>
-</body>
-</html>
+    {% block content %} {% endblock content %}
