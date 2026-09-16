@@ -12,7 +12,7 @@
 
             <div class="education-timeline">
                 {% for education in education_list %}
-                <div class="edu-frame">
+                <div class="edu-frame" style="--edu-index: {{ forloop.revcounter0 }};">
                     <div class="edu-logo-frame">
                         {% if education.logo %}
                         <img src="/static/img/{{ education.logo }}" alt="Logo {{ education.institution }}">
