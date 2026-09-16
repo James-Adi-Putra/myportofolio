@@ -34,11 +34,11 @@
         </div>
     </section>
 </main>
-{% endblock content %}
 
 {% for experience in experience_list %}
 <div class="lightbox" id="exp-photo-{{ forloop.counter }}">
-    <a href="{% url 'main:show_experience' %}" class="lightbox-close">&times;</a>
+    <a href="#" class="lightbox-close">&times;</a>
     <img src="/static/img/{{ experience.thumbnail }}" alt="Foto {{ experience.title }} (besar)">
 </div>
 {% endfor %}
+{% endblock content %}
