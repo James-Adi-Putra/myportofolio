@@ -39,7 +39,7 @@ class Education(models.Model):
     degree = models.CharField(max_length=255)
     level = models.CharField(max_length=20, choices=EDUCATION_CHOICES, default='university')
     description = models.TextField(blank=True, null=True, help_text="Cerita singkat atau pencapaian selama di institusi ini")
-    logo = models.CharField(max_length=255, blank=True, null=True, help_text="Nama file logo di static/img/, contoh: ui-logo.svg")
+    logo = models.URLField(max_length=500, blank=True, null=True, help_text="URL logo institusi")
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
 

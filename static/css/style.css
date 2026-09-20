@@ -721,6 +721,17 @@ h1, .brand {
     line-height: 1.6;
 }
 
+.edu-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 0.75rem;
+}
+
+.edu-actions .button {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.85rem;
+}
+
 /* ============================================
    SECTION: PROJECTS
    ============================================ */

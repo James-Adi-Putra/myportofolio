@@ -4,7 +4,7 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.conf import settings
 from main.models import Experience, Education, Project
-from main.forms import ProjectForm
+from main.forms import ProjectForm, EducationForm
 
 def show_main(request):
     context = {
@@ -98,3 +98,58 @@ def delete_project(request, project_id):
         return redirect("main:show_projects")
 
     return redirect("main:show_projects")
+
+def create_education(request):
+    form = EducationForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        entered_password = form.cleaned_data.get("password")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Data tidak ditambahkan.")
+        else:
+            form.save()
+            messages.success(request, "Riwayat pendidikan berhasil ditambahkan!")
+            return redirect("main:show_education")
+
+    context = {
+        "name": "James Adi Putra",
+        "brand_name": "James",
+        "form": form,
+    }
+    return render(request, "education_form.html", context)
+
+def delete_education(request, education_id):
+    education = get_object_or_404(Education, pk=education_id)
+
+    if request.method == "POST":
+        entered_password = request.POST.get("password", "")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Data tidak dihapus.")
+            return redirect("main:show_education")
+
+        education.delete()
+        messages.success(request, "Riwayat pendidikan berhasil dihapus!")
+        return redirect("main:show_education")
+
+    return redirect("main:show_education")
+
+def update_education(request, education_id):
+    education = get_object_or_404(Education, pk=education_id)
+    form = EducationForm(request.POST or None, instance=education)
+
+    if request.method == "POST" and form.is_valid():
+        entered_password = form.cleaned_data.get("password")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Data tidak diubah.")
+        else:
+            form.save()
+            messages.success(request, "Riwayat pendidikan berhasil diperbarui!")
+            return redirect("main:show_education")
+
+    context = {
+        "name": "James Adi Putra",
+        "brand_name": "James",
+        "form": form,
+        "education": education,
+    }
+    return render(request, "education_form.html", context)

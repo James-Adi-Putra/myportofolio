@@ -7,15 +7,23 @@
     <section class="education-section" id="education">
         <div class="container">
             <p class="section-kicker">Roll of film</p>
-            <h1 class="section-title">Education</h1>
-            <p class="section-subtitle">My academic journey so far</p>
+            <div class="project-header">
+                <div>
+                    <h1 class="section-title">Education</h1>
+                    <p class="section-subtitle">My academic journey so far</p>
+                </div>
+                <a href="{% url 'main:create_education' %}" class="button project-add-button">
+                    <span aria-hidden="true">+</span>
+                    Tambah Pendidikan
+                </a>
+            </div>
 
             <div class="education-timeline">
                 {% for education in education_list %}
                 <div class="edu-frame" style="--edu-index: {{ forloop.revcounter0 }};">
                     <div class="edu-logo-frame">
                         {% if education.logo %}
-                        <img src="/static/img/{{ education.logo }}" alt="Logo {{ education.institution }}">
+                        <img src="{{ education.logo }}" alt="Logo {{ education.institution }}">
                         {% endif %}
                     </div>
                     <div class="edu-body">
@@ -30,6 +38,14 @@
                         {% if education.description %}
                         <p class="edu-description">{{ education.description }}</p>
                         {% endif %}
+                        <div class="edu-actions">
+                            <a href="{% url 'main:update_education' education.id %}" class="button button-secondary">Edit</a>
+                            <button type="button"
+                                    class="button button-danger"
+                                    popovertarget="delete-edu-{{ education.id }}">
+                                Hapus
+                            </button>
+                        </div>
                     </div>
                     {% if not forloop.last %}
                     <div class="edu-connector"></div>
@@ -37,6 +53,46 @@
                 </div>
                 {% empty %}
                 <p class="empty-state">Belum ada riwayat pendidikan yang ditambahkan.</p>
+                {% endfor %}
+                {% for education in education_list %}
+                <div id="delete-edu-{{ education.id }}"
+                    class="project-delete-modal"
+                    popover="auto"
+                    role="dialog"
+                    aria-modal="true">
+                    <button type="button"
+                            class="project-delete-modal__backdrop"
+                            popovertarget="delete-edu-{{ education.id }}"
+                            popovertargetaction="hide"
+                            aria-label="Tutup konfirmasi hapus"></button>
+                    <div class="project-delete-modal__content">
+                        <button type="button"
+                                class="project-delete-modal__close"
+                                popovertarget="delete-edu-{{ education.id }}"
+                                popovertargetaction="hide"
+                                aria-label="Tutup konfirmasi hapus">&times;</button>
+                        <h2>Hapus Riwayat Pendidikan?</h2>
+                        <p>Apakah Anda yakin ingin menghapus <strong>{{ education.institution }}</strong>?</p>
+                        <form method="post" action="{% url 'main:delete_education' education.id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="delete-edu-password-{{ education.id }}">Kode Rahasia</label>
+                                <input type="password"
+                                    name="password"
+                                    id="delete-edu-password-{{ education.id }}"
+                                    placeholder="Masukkan kode rahasia"
+                                    required>
+                            </div>
+                            <div class="project-delete-modal__actions">
+                                <button type="button"
+                                        class="button button-secondary"
+                                        popovertarget="delete-edu-{{ education.id }}"
+                                        popovertargetaction="hide">Batal</button>
+                                <button type="submit" class="button button-danger">Ya, Hapus</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
