@@ -29,14 +29,6 @@ def show_experience(request):
     }
     return render(request, "experience.html", context)
 
-def show_education(request):
-    context = {
-        "name": "James",
-        "brand_name": "James",
-        "education_list": Education.objects.all(),
-    }
-    return render(request, "education.html", context)
-
 def get_projects_json(request):
     title_query = request.GET.get("title", "").strip()
     projects = Project.objects.all()
@@ -98,6 +90,27 @@ def delete_project(request, project_id):
         return redirect("main:show_projects")
 
     return redirect("main:show_projects")
+
+def get_education_json(request):
+    education_list = Education.objects.all()
+    education_json = serializers.serialize("json", education_list)
+    return HttpResponse(education_json, content_type="application/json")
+
+def show_education(request):
+    json_response = get_education_json(request)
+
+    education_entries = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    education_list = [entry.object for entry in education_entries]
+
+    context = {
+        "name": "James",
+        "brand_name": "James",
+        "education_list": education_list,
+    }
+    return render(request, "education.html", context)
 
 def create_education(request):
     form = EducationForm(request.POST or None)
