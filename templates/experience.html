@@ -7,14 +7,22 @@
     <section class="experience-section" id="experience">
         <div class="container">
             <p class="section-kicker">Every frame tells a story</p>
-            <h1 class="section-title">Experience</h1>
-            <p class="section-subtitle">Tap or click a photo to view it up close!</p>
+            <div class="project-header">
+                <div>
+                    <h1 class="section-title">Experience</h1>
+                    <p class="section-subtitle">Tap or click a photo to view it up close!</p>
+                </div>
+                <a href="{% url 'main:create_experience' %}" class="button project-add-button">
+                    <span aria-hidden="true">+</span>
+                    Tambah Pengalaman
+                </a>
+            </div>
 
             <div class="experience-grid">
                 {% for experience in experience_list %}
                 <article class="experience-card">
                     <a href="#exp-photo-{{ forloop.counter }}" class="exp-photo-link">
-                        <img src="/static/img/{{ experience.thumbnail }}" alt="Foto {{ experience.title }}" class="exp-photo">
+                        <img src="{{ experience.thumbnail }}" alt="Foto {{ experience.title }}" class="exp-photo">
                     </a>
                     <div class="exp-body">
                         <span class="experience-category">{{ experience.get_category_display }}</span>
@@ -25,6 +33,11 @@
                         {% else %}
                         <p class="experience-status">Selesai</p>
                         {% endif %}
+                        <div class="edu-actions">
+                            <a href="{% url 'main:update_experience' experience.id %}" class="button button-secondary">Edit</a>
+                            {% url 'main:delete_experience' experience.id as experience_delete_url %}
+                            {% include "components/confirm_delete.html" with delete_url=experience_delete_url item_label="Pengalaman" item_name=experience.title button_label="Hapus" %}
+                        </div>
                     </div>
                 </article>
                 {% empty %}
@@ -38,7 +51,7 @@
 {% for experience in experience_list %}
 <div class="lightbox" id="exp-photo-{{ forloop.counter }}">
     <a href="#" class="lightbox-close">&times;</a>
-    <img src="/static/img/{{ experience.thumbnail }}" alt="Foto {{ experience.title }} (besar)">
+    <img src="{{ experience.thumbnail }}" alt="Foto {{ experience.title }} (besar)">
 </div>
 {% endfor %}
 {% endblock content %}

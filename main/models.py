@@ -16,7 +16,7 @@ class Experience(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='organization')
-    thumbnail = models.CharField(max_length=255, blank=True, null=True, help_text="Nama file gambar di static/img/, contoh: mentor.svg")
+    thumbnail = models.URLField(max_length=500, blank=True, null=True, help_text="URL gambar pengalaman")
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
 

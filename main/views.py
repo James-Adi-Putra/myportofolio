@@ -4,7 +4,7 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.conf import settings
 from main.models import Experience, Education, Project
-from main.forms import ProjectForm, EducationForm
+from main.forms import ExperienceForm, EducationForm, ProjectForm
 
 def show_main(request):
     context = {
@@ -21,13 +21,157 @@ def show_main(request):
     }
     return render(request, "index.html", context)
 
+def get_experience_json(request):
+    experience_list = Experience.objects.all()
+    experience_json = serializers.serialize("json", experience_list)
+    return HttpResponse(experience_json, content_type="application/json")
+
 def show_experience(request):
+    json_response = get_experience_json(request)
+
+    experience_entries = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    experience_list = [entry.object for entry in experience_entries]
+
     context = {
         "name": "James",
         "brand_name": "James",
-        "experience_list": Experience.objects.all(),
+        "experience_list": experience_list,
     }
     return render(request, "experience.html", context)
+
+def create_experience(request):
+    form = ExperienceForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        entered_password = form.cleaned_data.get("password")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Pengalaman tidak ditambahkan.")
+        else:
+            form.save()
+            messages.success(request, "Pengalaman baru berhasil ditambahkan!")
+            return redirect("main:show_experience")
+
+    context = {
+        "name": "James Adi Putra",
+        "brand_name": "James",
+        "form": form,
+    }
+    return render(request, "experience_form.html", context)
+
+def update_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    form = ExperienceForm(request.POST or None, instance=experience)
+
+    if request.method == "POST" and form.is_valid():
+        entered_password = form.cleaned_data.get("password")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Pengalaman tidak diubah.")
+        else:
+            form.save()
+            messages.success(request, "Pengalaman berhasil diperbarui!")
+            return redirect("main:show_experience")
+
+    context = {
+        "name": "James Adi Putra",
+        "brand_name": "James",
+        "form": form,
+        "experience": experience,
+    }
+    return render(request, "experience_form.html", context)
+
+def delete_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        entered_password = request.POST.get("password", "")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Pengalaman tidak dihapus.")
+            return redirect("main:show_experience")
+
+        experience.delete()
+        messages.success(request, "Pengalaman berhasil dihapus!")
+        return redirect("main:show_experience")
+
+    return redirect("main:show_experience")
+
+def get_education_json(request):
+    education_list = Education.objects.all()
+    education_json = serializers.serialize("json", education_list)
+    return HttpResponse(education_json, content_type="application/json")
+
+def show_education(request):
+    json_response = get_education_json(request)
+
+    education_entries = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    education_list = [entry.object for entry in education_entries]
+
+    context = {
+        "name": "James",
+        "brand_name": "James",
+        "education_list": education_list,
+    }
+    return render(request, "education.html", context)
+
+def create_education(request):
+    form = EducationForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        entered_password = form.cleaned_data.get("password")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Data tidak ditambahkan.")
+        else:
+            form.save()
+            messages.success(request, "Riwayat pendidikan berhasil ditambahkan!")
+            return redirect("main:show_education")
+
+    context = {
+        "name": "James Adi Putra",
+        "brand_name": "James",
+        "form": form,
+    }
+    return render(request, "education_form.html", context)
+
+def delete_education(request, education_id):
+    education = get_object_or_404(Education, pk=education_id)
+
+    if request.method == "POST":
+        entered_password = request.POST.get("password", "")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Data tidak dihapus.")
+            return redirect("main:show_education")
+
+        education.delete()
+        messages.success(request, "Riwayat pendidikan berhasil dihapus!")
+        return redirect("main:show_education")
+
+    return redirect("main:show_education")
+
+def update_education(request, education_id):
+    education = get_object_or_404(Education, pk=education_id)
+    form = EducationForm(request.POST or None, instance=education)
+
+    if request.method == "POST" and form.is_valid():
+        entered_password = form.cleaned_data.get("password")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Data tidak diubah.")
+        else:
+            form.save()
+            messages.success(request, "Riwayat pendidikan berhasil diperbarui!")
+            return redirect("main:show_education")
+
+    context = {
+        "name": "James Adi Putra",
+        "brand_name": "James",
+        "form": form,
+        "education": education,
+    }
+    return render(request, "education_form.html", context)
 
 def get_projects_json(request):
     title_query = request.GET.get("title", "").strip()
@@ -111,79 +255,3 @@ def update_project(request, project_id):
         "project": project,
     }
     return render(request, "projects_form.html", context)
-
-def get_education_json(request):
-    education_list = Education.objects.all()
-    education_json = serializers.serialize("json", education_list)
-    return HttpResponse(education_json, content_type="application/json")
-
-def show_education(request):
-    json_response = get_education_json(request)
-
-    education_entries = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-    education_list = [entry.object for entry in education_entries]
-
-    context = {
-        "name": "James",
-        "brand_name": "James",
-        "education_list": education_list,
-    }
-    return render(request, "education.html", context)
-
-def create_education(request):
-    form = EducationForm(request.POST or None)
-
-    if request.method == "POST" and form.is_valid():
-        entered_password = form.cleaned_data.get("password")
-        if entered_password != settings.PORTFOLIO_SECRET:
-            messages.error(request, "Kode rahasia salah! Data tidak ditambahkan.")
-        else:
-            form.save()
-            messages.success(request, "Riwayat pendidikan berhasil ditambahkan!")
-            return redirect("main:show_education")
-
-    context = {
-        "name": "James Adi Putra",
-        "brand_name": "James",
-        "form": form,
-    }
-    return render(request, "education_form.html", context)
-
-def delete_education(request, education_id):
-    education = get_object_or_404(Education, pk=education_id)
-
-    if request.method == "POST":
-        entered_password = request.POST.get("password", "")
-        if entered_password != settings.PORTFOLIO_SECRET:
-            messages.error(request, "Kode rahasia salah! Data tidak dihapus.")
-            return redirect("main:show_education")
-
-        education.delete()
-        messages.success(request, "Riwayat pendidikan berhasil dihapus!")
-        return redirect("main:show_education")
-
-    return redirect("main:show_education")
-
-def update_education(request, education_id):
-    education = get_object_or_404(Education, pk=education_id)
-    form = EducationForm(request.POST or None, instance=education)
-
-    if request.method == "POST" and form.is_valid():
-        entered_password = form.cleaned_data.get("password")
-        if entered_password != settings.PORTFOLIO_SECRET:
-            messages.error(request, "Kode rahasia salah! Data tidak diubah.")
-        else:
-            form.save()
-            messages.success(request, "Riwayat pendidikan berhasil diperbarui!")
-            return redirect("main:show_education")
-
-    context = {
-        "name": "James Adi Putra",
-        "brand_name": "James",
-        "form": form,
-        "education": education,
-    }
-    return render(request, "education_form.html", context)
