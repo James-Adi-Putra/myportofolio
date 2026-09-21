@@ -48,3 +48,25 @@ Saya meminta bantuan untuk desain css dari section education lalu saya melempark
 3. pengambilan keputusan desain visual dan tema yaitu merubah opasity latar belakang
 4. Melakukan penyesuaian terhadap lebar kotak experience di tampilan Desktop maupun tampilan HP
 5. Pengujian manual di browser dan HP menggunakan inspect untuk test performance 
+
+
+## Tugas 3
+1. Karena field-nya otomatis di generate sesuai model yang udah saya definisikan di `models.py`. Jadi saya nggak perlu nulis satu-satu `<input>` buat tiap field, dan Django juga otomatis validasi tipe datanya misalnya field `URLField` bakal otomatis ditolak kalau isinya bukan link yang valid. Ini juga yang bikin saya bisa pakai form yang sama buat Create dan Update sekaligus, tinggal kasih parameter `instance=` waktu mau edit data yang udah ada, jadi nggak perlu bikin dua form terpisah.
+Soal `{% csrf_token %}`, itu wajib karena tanpa token ini form rawan kena serangan CSRF situs lain bisa aja bikin form palsu yang diam-diam ngirim request (misalnya hapus data) ke website pas lagi login, tanpa saya sadar. Token ini kayak "kode rahasia" yang Django kasih ke tiap form, dan Django cuma bakal proses submit kalau tokennya cocok. 
+2.Menurut saya JSON lebih enak dipakai karena strukturnya lebih ringkas dibanding XML nggak perlu nulis closing tag kayak `</tag>` di tiap elemen lebih ringkas juga sih
+3.Waktu endpoint `/api/education/` diakses, view `get_education_json` mengambil data lewat `Education.objects.all()`, lalu `serializers.serialize("json", ...)` mengubah objek Django itu jadi string JSON sebelum dikirim lewat `HttpResponse`. Serialization diperlukan karena objek Model Django adalah struktur data internal Python yang nggak bisa langsung dipahami sistem lain, jadi harus diterjemahkan dulu ke format teks universal. `show_education` juga sengaja mengambil datanya lewat proses serialize-deserialize ini, bukan langsung query database, supaya polanya sama seperti data yang datang dari API terpisah
+
+## Strategi Prompting
+Aku menggunakan pendekatan step-by-step: meminta satu langkah dulu, mencoba menjalankannya sendiri, baru meminta lanjutan atau bantuan debug kalau menemukan error
+## AI Disclosure
+Saya menggunakan Claude (Anthropic) sebagai bantuan dalam beberapa bagian tugas ini, dengan rincian sebagai berikut:
+1. Panduan step-by-step membangun fitur CRUD (Create, Update, Delete) termasuk penjelasan cara `instance=` dipakai supaya form yang sama bisa dipakai untuk Create dan Update
+2. Implementasi endpoint JSON (`get_education_json`) dan penyesuaian `show_education` supaya mengambil data lewat proses serialize-deserialize, mengikuti pola yang sama seperti Project di Tutorial 03
+3. Refactor modal konfirmasi hapus jadi satu component reusable (`confirm_delete.html`) yang dipakai bersama untuk Project dan Education, supaya tidak ada duplikasi kode
+4. Perbaikan dan debug beberapa kode css yang terlalu menumpuk dan tidak efisien secara fungsi bisa disederhanakan
+## Bagian yang saya kerjakan sendiri : 
+1. Keputusan menambahkan field `logo` sebagai URL (bukan file lokal) untuk konsistensi dengan Project, termasuk mencari solusi sendiri saat Google Drive menghilangkan transparansi gambar dan akhirnya memilih GitHub raw URL
+2. Semua kode aku ketik dan jalankan sendiri, dicek langsung di browser (lokal dan production) sebelum lanjut
+3. Debug awal mandiri sebelum minta bantuan AI, seperti waktu menemukan ada fungsi `delete_project` yang terduplikasi di `views.py` sehingga password check tidak berjalan
+## Refleksi Proses
+Selama proses ini saya jadi tau bagaimana cara kerja django admin dengan membuat sistem CRUD sendiri sebelum ini saya memasukkan data secara manual menggunakan superuser di django admin tanpa tau cara build dari nol. Dengan bantuan AI untuk melakukan refactor pada struktur CSS tentunya karena ada beberapa code CSS yang redundan dan perlu disederhanakan next akan melanjutkan tutorial 4 dulu sambil memperbaiki beberapa tampilan notifikasi dan css lain yang masih mau diubah.
