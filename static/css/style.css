@@ -42,7 +42,7 @@ h1, .brand {
 }
 
 /* ============================================
-                    HEADER
+   HEADER
    ============================================ */
 .site-header {
     position: sticky;
@@ -115,7 +115,7 @@ h1, .brand {
 }
 
 /* ============================================
-   SECTION HEADING ini dipakai bersama untuk Experience, Education, Projects)
+   SECTION HEADING (dipakai bersama: Experience, Education, Projects)
    ============================================ */
 .section-kicker {
     display: block;
@@ -151,7 +151,7 @@ h1, .brand {
 }
 
 /* ============================================
-            BUTTONS dipakai bersama juga
+   BUTTONS (dipakai bersama)
    ============================================ */
 .button {
     display: inline-block;
@@ -198,7 +198,7 @@ h1, .brand {
 }
 
 /* ============================================
-                HERO / SECTION PROFILE
+   HERO / SECTION PROFILE
    ============================================ */
 .hero {
     padding: 4.5rem 0 5rem;
@@ -426,7 +426,7 @@ h1, .brand {
 }
 
 /* ============================================
-                    FOOTER
+   FOOTER
    ============================================ */
 .site-footer {
     padding: 1.5rem;
@@ -721,15 +721,33 @@ h1, .brand {
     line-height: 1.6;
 }
 
-.edu-actions {
+/* ============================================
+   ACTIONS (dipakai bersama: Education & Projects)
+   ============================================ */
+.edu-actions,
+.project-actions {
     display: flex;
+    align-items: center;
     gap: 12px;
+    flex-wrap: wrap;
     margin-top: 0.75rem;
 }
 
-.edu-actions .button {
+.edu-actions .button,
+.project-actions .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    height: 44px;
+    padding: 0 20px;
     font-size: 0.85rem;
-    padding: 0.5rem 0.85rem;
+    font-weight: 600;
+}
+
+.edu-actions .experience-status,
+.project-actions .experience-status {
+    margin: 0;
 }
 
 /* ============================================
@@ -808,23 +826,6 @@ h1, .brand {
     line-height: 1;
 }
 
-.project-actions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 1.25rem;
-}
-
-.project-actions .button {
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.project-actions .experience-status {
-    margin-top: 0;
-}
-
 .project-card-actions {
     display: flex;
     flex-direction: column;
@@ -853,7 +854,7 @@ h1, .brand {
     border-color: var(--accent);
 }
 
-/* Hapus Project */
+/* Modal Hapus (Project & Education, dipakai lewat components/confirm_delete.html) */
 .project-delete-modal {
     display: none;
     position: fixed;
@@ -929,7 +930,7 @@ h1, .brand {
 }
 
 /* ============================================
-                PROJECT FORM
+   FORMS (Project & Education, form-group dipakai bersama)
    ============================================ */
 .project-form {
     width: 100%;
@@ -949,7 +950,8 @@ h1, .brand {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 0.7rem;
     background-color: var(--paper-alt);
@@ -961,9 +963,39 @@ h1, .brand {
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: 2px solid var(--accent);
     border-color: var(--accent);
+}
+
+input[type="date"] {
+    color-scheme: light;
+}
+
+.form-group input[type="date"] {
+    background-color: var(--paper-alt);
+    color: var(--ink);
+    height: 52px;
+    padding: 0 1rem;
+}
+
+.form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 52px;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23d6472c'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 1rem;
+    cursor: pointer;
+}
+
+.form-group select option {
+    background-color: var(--paper-alt);
+    color: var(--ink);
 }
 
 .form-error {
@@ -972,7 +1004,9 @@ h1, .brand {
     margin-top: 0.35rem;
 }
 
-/* ===== Alerts ===== */
+/* ============================================
+   ALERTS
+   ============================================ */
 .alert {
     margin-top: 1rem;
     padding: 0.75rem 1rem;
@@ -1071,7 +1105,7 @@ h1, .brand {
     }
 
     .project-search {
-    flex-direction: column;
+        flex-direction: column;
     }
 
     .project-search .button {

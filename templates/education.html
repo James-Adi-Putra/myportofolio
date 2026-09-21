@@ -40,11 +40,8 @@
                         {% endif %}
                         <div class="edu-actions">
                             <a href="{% url 'main:update_education' education.id %}" class="button button-secondary">Edit</a>
-                            <button type="button"
-                                    class="button button-danger"
-                                    popovertarget="delete-edu-{{ education.id }}">
-                                Hapus
-                            </button>
+                            {% url 'main:delete_education' education.id as education_delete_url %}
+                            {% include "components/confirm_delete.html" with delete_url=education_delete_url item_label="Riwayat Pendidikan" item_name=education.institution button_label="Hapus" %}
                         </div>
                     </div>
                     {% if not forloop.last %}
@@ -53,46 +50,6 @@
                 </div>
                 {% empty %}
                 <p class="empty-state">Belum ada riwayat pendidikan yang ditambahkan.</p>
-                {% endfor %}
-                {% for education in education_list %}
-                <div id="delete-edu-{{ education.id }}"
-                    class="project-delete-modal"
-                    popover="auto"
-                    role="dialog"
-                    aria-modal="true">
-                    <button type="button"
-                            class="project-delete-modal__backdrop"
-                            popovertarget="delete-edu-{{ education.id }}"
-                            popovertargetaction="hide"
-                            aria-label="Tutup konfirmasi hapus"></button>
-                    <div class="project-delete-modal__content">
-                        <button type="button"
-                                class="project-delete-modal__close"
-                                popovertarget="delete-edu-{{ education.id }}"
-                                popovertargetaction="hide"
-                                aria-label="Tutup konfirmasi hapus">&times;</button>
-                        <h2>Hapus Riwayat Pendidikan?</h2>
-                        <p>Apakah Anda yakin ingin menghapus <strong>{{ education.institution }}</strong>?</p>
-                        <form method="post" action="{% url 'main:delete_education' education.id %}">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="delete-edu-password-{{ education.id }}">Kode Rahasia</label>
-                                <input type="password"
-                                    name="password"
-                                    id="delete-edu-password-{{ education.id }}"
-                                    placeholder="Masukkan kode rahasia"
-                                    required>
-                            </div>
-                            <div class="project-delete-modal__actions">
-                                <button type="button"
-                                        class="button button-secondary"
-                                        popovertarget="delete-edu-{{ education.id }}"
-                                        popovertargetaction="hide">Batal</button>
-                                <button type="submit" class="button button-danger">Ya, Hapus</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
                 {% endfor %}
             </div>
         </div>
