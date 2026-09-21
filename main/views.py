@@ -91,6 +91,27 @@ def delete_project(request, project_id):
 
     return redirect("main:show_projects")
 
+def update_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    form = ProjectForm(request.POST or None, instance=project)
+
+    if request.method == "POST" and form.is_valid():
+        entered_password = form.cleaned_data.get("password")
+        if entered_password != settings.PORTFOLIO_SECRET:
+            messages.error(request, "Kode rahasia salah! Proyek tidak diubah.")
+        else:
+            form.save()
+            messages.success(request, "Proyek berhasil diperbarui!")
+            return redirect("main:show_projects")
+
+    context = {
+        "name": "James Adi Putra",
+        "brand_name": "James",
+        "form": form,
+        "project": project,
+    }
+    return render(request, "projects_form.html", context)
+
 def get_education_json(request):
     education_list = Education.objects.all()
     education_json = serializers.serialize("json", education_list)

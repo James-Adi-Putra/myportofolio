@@ -48,6 +48,7 @@
                             {% if project.project_url %}
                             <a href="{{ project.project_url }}" class="button">Lihat Project</a>
                             {% endif %}
+                            <a href="{% url 'main:update_project' project.id %}" class="button button-secondary">Edit</a>
                             {% url 'main:delete_project' project.id as project_delete_url %}
                             {% include "components/confirm_delete.html" with delete_url=project_delete_url item_label="Proyek" item_name=project.title button_label="Hapus Proyek" %}
                         </div>
