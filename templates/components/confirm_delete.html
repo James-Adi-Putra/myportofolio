@@ -30,14 +30,6 @@
         </p>
         <form method="post" action="{{ delete_url }}">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="{{ target_id }}-password">Kode Rahasia</label>
-                <input type="password"
-                       name="password"
-                       id="{{ target_id }}-password"
-                       placeholder="Masukkan kode rahasia"
-                       required>
-            </div>
             <div class="project-delete-modal__actions">
                 <button type="button"
                         class="button button-secondary"

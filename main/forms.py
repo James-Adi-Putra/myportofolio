@@ -3,12 +3,6 @@ from django.forms import ModelForm, TextInput, Textarea, URLInput
 from main.models import Experience, Education, Project
 
 class ExperienceForm(ModelForm):
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Masukkan kode rahasia"}),
-        label="Kode Rahasia",
-        required=True,
-    )
-
     class Meta:
         model = Experience
         fields = [
@@ -44,12 +38,6 @@ class ExperienceForm(ModelForm):
         }
 
 class EducationForm(ModelForm):
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Masukkan kode rahasia"}),
-        label="Kode Rahasia",
-        required=True,
-    )
-
     class Meta:
         model = Education
         fields = [
@@ -90,12 +78,6 @@ class EducationForm(ModelForm):
         }
 
 class ProjectForm(ModelForm):
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Masukkan kode rahasia"}),
-        label="Kode Rahasia",
-        required=True,
-    )
-
     class Meta:
         model = Project
         fields = [

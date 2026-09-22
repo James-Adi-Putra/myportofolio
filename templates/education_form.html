@@ -7,7 +7,7 @@
     <section class="experience-section">
         <div class="container">
             <h1>{% if education %}Edit Education{% else %}Add Education{% endif %}</h1>
-            <form method="post"
+            <form method="POST"
                   action="
                   {% if education %}
                   {% url 'main:update_education' education.id %}

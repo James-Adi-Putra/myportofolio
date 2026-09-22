@@ -12,10 +12,12 @@
                     <h1 class="section-title">Experience</h1>
                     <p class="section-subtitle">Tap or click a photo to view it up close!</p>
                 </div>
+                {% if user.is_superuser %}
                 <a href="{% url 'main:create_experience' %}" class="button project-add-button">
                     <span aria-hidden="true">+</span>
                     Tambah Pengalaman
                 </a>
+                {% endif %}
             </div>
 
             <div class="experience-grid">
@@ -33,11 +35,14 @@
                         {% else %}
                         <p class="experience-status">Selesai</p>
                         {% endif %}
+                        {% include "components/experience_star.html" with experience=experience %}
+                        {% if user.is_superuser %}
                         <div class="edu-actions">
                             <a href="{% url 'main:update_experience' experience.id %}" class="button button-secondary">Edit</a>
                             {% url 'main:delete_experience' experience.id as experience_delete_url %}
                             {% include "components/confirm_delete.html" with delete_url=experience_delete_url item_label="Pengalaman" item_name=experience.title button_label="Hapus" %}
                         </div>
+                        {% endif %}
                     </div>
                 </article>
                 {% empty %}

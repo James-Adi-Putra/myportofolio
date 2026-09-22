@@ -264,14 +264,21 @@ h1, .brand {
 }
 
 .meta-list {
-    display: flex;
-    gap: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem 2rem;
     margin-bottom: 1.75rem;
     padding: 1rem 1.25rem;
     border-radius: var(--radius);
     background-color: #2a2a2b;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meta-row:last-child {
+    grid-column: 1 / -1;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
 }
 
 .meta-list:hover {
@@ -290,6 +297,14 @@ h1, .brand {
 .meta-row dd {
     font-weight: 600;
     color: var(--ink);
+}
+
+.meta-row:last-child dd {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    word-break: break-word;
 }
 
 .social-links {
@@ -1026,6 +1041,31 @@ input[type="date"] {
     color: var(--danger);
 }
 
+/* =============
+   STAR BUTTON 
+   ============= */
+.star-form {
+    display: inline;
+}
+
+.button-star {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--ink);
+}
+
+.button-star.is-starred {
+    background: var(--accent);
+}
+
+.star-count {
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.25);
+    font-size: 0.8rem;
+}
+
 /* ============================================
    RESPONSIVE (max-width: 600px)
    ============================================ */
@@ -1062,6 +1102,14 @@ input[type="date"] {
 
     .social-links {
         justify-content: flex-start;
+    }
+
+    .meta-list {
+        grid-template-columns: 1fr;
+    }
+
+    .meta-row:last-child {
+        grid-column: auto;
     }
 
     .section-title {
