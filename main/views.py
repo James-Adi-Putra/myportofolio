@@ -10,6 +10,14 @@ from django.http import HttpResponse
 from main.models import Experience, Education, Project
 from main.forms import ExperienceForm, EducationForm, ProjectForm
 
+# EDITOR
+def is_editor(user):
+    return user.groups.filter(name="Editor").exists()
+
+def can_update(user):
+    return user.is_superuser or is_editor(user)
+
+#MAIN
 def show_main(request):
     last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
     context = {
@@ -85,6 +93,7 @@ def show_experience(request):
         "name": "James",
         "brand_name": "James",
         "experience_list": experience_list,
+        "is_editor": is_editor(request.user),
     }
     return render(request, "experience.html", context)
 
@@ -109,7 +118,7 @@ def create_experience(request):
 
 @login_required(login_url="/login/")
 def update_experience(request, experience_id):
-    if not request.user.is_superuser:
+    if not can_update(request.user):
         raise PermissionDenied
 
     experience = get_object_or_404(Experience, pk=experience_id)
@@ -161,6 +170,7 @@ def show_education(request):
         "name": "James",
         "brand_name": "James",
         "education_list": education_list,
+        "is_editor": is_editor(request.user),
     }
     return render(request, "education.html", context)
 
@@ -185,7 +195,7 @@ def create_education(request):
 
 @login_required(login_url="/login/")
 def update_education(request, education_id):
-    if not request.user.is_superuser:
+    if not can_update(request.user):
         raise PermissionDenied
 
     education = get_object_or_404(Education, pk=education_id)
@@ -246,6 +256,7 @@ def show_projects(request):
         "brand_name": "James",
         "project_list": projects,
         "title_query": title_query,
+        "is_editor": is_editor(request.user),
     }
     return render(request, "project.html", context)
 
@@ -270,7 +281,7 @@ def create_project(request):
 
 @login_required(login_url="/login/")
 def update_project(request, project_id):
-    if not request.user.is_superuser:
+    if not can_update(request.user):
         raise PermissionDenied
 
     project = get_object_or_404(Project, pk=project_id)

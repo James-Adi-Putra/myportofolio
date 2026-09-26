@@ -24,7 +24,9 @@
                 {% for experience in experience_list %}
                 <article class="experience-card">
                     <a href="#exp-photo-{{ forloop.counter }}" class="exp-photo-link">
+                        {% if experience.thumbnail %}
                         <img src="{{ experience.thumbnail }}" alt="Foto {{ experience.title }}" class="exp-photo">
+                        {% endif %}
                     </a>
                     <div class="exp-body">
                         <span class="experience-category">{{ experience.get_category_display }}</span>
@@ -36,13 +38,15 @@
                         <p class="experience-status">Selesai</p>
                         {% endif %}
                         {% include "components/experience_star.html" with experience=experience %}
-                        {% if user.is_superuser %}
-                        <div class="edu-actions">
+                        <div class="experience-actions">
+                            {% if user.is_superuser or is_editor %}
                             <a href="{% url 'main:update_experience' experience.id %}" class="button button-secondary">Edit</a>
+                            {% endif %}
+                            {% if user.is_superuser %}
                             {% url 'main:delete_experience' experience.id as experience_delete_url %}
                             {% include "components/confirm_delete.html" with delete_url=experience_delete_url item_label="Pengalaman" item_name=experience.title button_label="Hapus" %}
+                            {% endif %}
                         </div>
-                        {% endif %}
                     </div>
                 </article>
                 {% empty %}

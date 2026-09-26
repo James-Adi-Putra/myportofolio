@@ -4,7 +4,7 @@
 {% endblock meta %}
 {% block content %}
 <main>
-    <section class="experience-section" id="projects">
+    <section class="project-section" id="projects">
         <div class="container">
             <p class="section-kicker">Frames I've developed</p>
             <div class="project-header">
@@ -33,9 +33,9 @@
                 <button type="submit" class="button">Cari</button>
             </form>
 
-            <div class="experience-grid project-grid">
+            <div class="project-grid">
                 {% for project in project_list %}
-                <article class="experience-card">
+                <article class="project-card">
                     {% if project.project_image_url %}
                     <div class="project-image-wrap">
                         <img src="{{ project.project_image_url }}"
@@ -44,16 +44,20 @@
                     </div>
                     {% endif %}
                     <h2>{{ project.title }}</h2>
-                    <span class="experience-category">{{ project.skills_used }}</span>
-                    <p class="experience-description">{{ project.description }}</p>
+                    <span class="project-category">{{ project.skills_used }}</span>
+                    <p class="project-description">{{ project.description }}</p>
                     <div class="project-card-actions">
                         <div class="project-actions">
                             {% if project.project_url %}
                             <a href="{{ project.project_url }}" class="button">Lihat Project</a>
                             {% endif %}
+
                             {% include "components/project_star.html" with project=project %}
-                            {% if user.is_superuser %}
+                            {% if user.is_superuser or is_editor %}
                             <a href="{% url 'main:update_project' project.id %}" class="button button-secondary">Edit</a>
+                            {% endif %}
+                            
+                            {% if user.is_superuser %}
                             {% url 'main:delete_project' project.id as project_delete_url %}
                             {% include "components/confirm_delete.html" with delete_url=project_delete_url item_label="Proyek" item_name=project.title button_label="Hapus Proyek" %}
                             {% endif %}

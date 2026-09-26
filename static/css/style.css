@@ -14,7 +14,13 @@
     --text-muted: #97958f;
     --text-faint: #b8b6b0;
     --radius: 3px;
-    --danger: #e5484d;
+    --danger: #cf6a5a;                          /* softened, warm brick */
+    --success: #9db07e;                         /* muted sage */
+    --success-soft: rgba(157, 176, 126, 0.12);
+    --success-line: rgba(157, 176, 126, 0.45);
+    --error: #e0917d;                           /* soft terracotta */
+    --error-soft: rgba(214, 71, 44, 0.12);
+    --error-line: rgba(214, 71, 44, 0.5);
 }
 
 body {
@@ -202,7 +208,7 @@ h1, .brand {
 .button-danger:hover {
     filter: none;
     box-shadow: none;
-    background: rgba(229, 72, 77, 0.15);
+    background: rgba(207, 106, 90, 0.15);
 }
 
 /* ============================================
@@ -449,19 +455,10 @@ h1, .brand {
 }
 
 /* ============================================
-   FOOTER
-   ============================================ */
-.site-footer {
-    padding: 1.5rem;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    border-top: 1px solid var(--line);
-}
-
-/* ============================================
    CARD (dasar dipakai bersama: Experience & Projects)
    ============================================ */
-.experience-card {
+.experience-card,
+.project-card {
     background-color: var(--paper-alt);
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -471,7 +468,9 @@ h1, .brand {
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.experience-card:hover {
+
+.experience-card:hover,
+.project-card:hover {
     transform: translateY(-4px);
     border-color: var(--accent);
     box-shadow:
@@ -479,7 +478,8 @@ h1, .brand {
         0 0 16px 2px rgba(214, 71, 44, 0.2);
 }
 
-.experience-category {
+.experience-category,
+.project-category {
     color: var(--accent);
     font-size: 0.75rem;
     font-weight: 700;
@@ -487,7 +487,8 @@ h1, .brand {
     letter-spacing: 0.05em;
 }
 
-.experience-description {
+.experience-description,
+.project-description {
     color: var(--text-muted);
     font-size: 0.9rem;
 }
@@ -502,7 +503,8 @@ h1, .brand {
 /* ============================================
    SECTION: EXPERIENCE
    ============================================ */
-.experience-section {
+.experience-section,
+.project-section {
     position: relative;
     padding: 5rem 0 5rem;
 }
@@ -747,6 +749,7 @@ h1, .brand {
 /* ============================================
    ACTIONS (dipakai bersama: Education & Projects)
    ============================================ */
+.experience-actions,
 .edu-actions,
 .project-actions {
     display: flex;
@@ -756,6 +759,7 @@ h1, .brand {
     margin-top: 0.75rem;
 }
 
+.experience-actions .button,
 .edu-actions .button,
 .project-actions .button {
     display: inline-flex;
@@ -768,6 +772,7 @@ h1, .brand {
     font-weight: 600;
 }
 
+.experience-actions .experience-status,
 .edu-actions .experience-status,
 .project-actions .experience-status {
     margin: 0;
@@ -793,9 +798,10 @@ h1, .brand {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.75rem;
+    padding-bottom: 1rem;
 }
 
-.project-grid .experience-card {
+.project-grid .project-card {
     padding: 0;
 }
 
@@ -812,29 +818,28 @@ h1, .brand {
     transition: transform 0.35s ease;
 }
 
-.project-grid .experience-card:hover .project-image {
+.project-grid .project-card:hover .project-image {
     transform: scale(1.05);
 }
 
-.project-grid .experience-card > h2,
-.project-grid .experience-card > .experience-category,
-.project-grid .experience-card > .experience-description,
-.project-grid .experience-card > .project-card-actions {
+.project-grid .project-card > .project-category,
+.project-grid .project-card > .project-description,
+.project-grid .project-card > .project-card-actions {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
 }
 
-.project-grid .experience-card > h2 {
+.project-grid .project-card > h2 {
     margin-top: 1.25rem;
     font-family: "Space Grotesk", -apple-system, sans-serif;
     font-size: 1.1rem;
 }
 
-.project-grid .experience-card > .experience-category {
+.project-grid .project-card > .project-category {
     color: var(--text-faint);
 }
 
-.project-grid .experience-card > .project-card-actions {
+.project-grid .project-card > .project-card-actions {
     padding-bottom: 1.25rem;
 }
 
@@ -1027,6 +1032,17 @@ input[type="date"] {
     margin-top: 0.35rem;
 }
 
+.form-help {
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.form-help ul {
+    margin: 0.25rem 0 0 1.1rem;
+}
+
 /* ============================================
    ALERTS
    ============================================ */
@@ -1035,18 +1051,21 @@ input[type="date"] {
     padding: 0.75rem 1rem;
     border-radius: var(--radius);
     font-size: 0.9rem;
+    border-left: 3px solid var(--line);
 }
 
 .alert-success {
-    background: rgba(34, 197, 94, 0.15);
-    border: 1px solid #22c55e;
-    color: #4ade80;
+    background: var(--success-soft);
+    border: 1px solid var(--success-line);
+    border-left: 3px solid var(--success);
+    color: var(--success);
 }
 
 .alert-error {
-    background: rgba(229, 72, 77, 0.15);
-    border: 1px solid var(--danger);
-    color: var(--danger);
+    background: var(--error-soft);
+    border: 1px solid var(--error-line);
+    border-left: 3px solid var(--accent);
+    color: var(--error);
 }
 
 /* =============
