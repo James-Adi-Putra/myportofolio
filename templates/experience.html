@@ -58,9 +58,11 @@
 </main>
 
 {% for experience in experience_list %}
+{% if experience.thumbnail %}
 <div class="lightbox" id="exp-photo-{{ forloop.counter }}">
     <a href="#" class="lightbox-close">&times;</a>
     <img src="{{ experience.thumbnail }}" alt="Foto {{ experience.title }} (besar)">
 </div>
+{% endif %}
 {% endfor %}
 {% endblock content %}
