@@ -24,12 +24,9 @@ def show_main(request):
         "name": "James Adi Putra",
         "brand_name": "James",
         "npm": "2506624644",
-        "study_program": "S1 Sistem Informasi",
+        "study_program": "S-1 Sistem Informasi",
         "bio": (
-            "Hi, my name is James Adi Putra. You can call me James. I'm an Information "
-            "Systems student at the University of Indonesia with a strong interest in "
-            "exploring the field of cybersecurity. My goal is to develop the knowledge "
-            "and skills needed to protect IT products and systems from potential threats."
+            "Hi, I'm James Adi Putra. As an Information Systems student at Universitas Indonesia, I live where business strategy meets hardcore technology and where security meets uncertainty. While most build systems to run the digital world, my true passion lies in building the shield that protects it. Exploring the depth of cybersecurity to ensure that innovation never compromises safety."
         ),
         "last_login": last_login,
     }

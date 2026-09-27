@@ -1,3 +1,6 @@
+/* ============================================
+                Reset dan Variabel 
+   ============================================ */
 * {
     margin: 0;
     padding: 0;
@@ -64,6 +67,9 @@
     --shadow-raised-active:0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
+/* ============================================
+                Global / Base CSS
+   ============================================ */
 body {
     font-family: var(--font-body);
     color: var(--ink);
@@ -89,8 +95,15 @@ h1, .brand {
 }
 
 /* ============================================
-   HEADER
+                    HEADER
    ============================================ */
+.brand {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+}
+
 .site-header {
     position: sticky;
     top: 0;
@@ -116,13 +129,6 @@ h1, .brand {
     justify-content: space-between;
     align-items: center;
     padding: 1.25rem 1.5rem;
-}
-
-.brand {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--ink);
-    text-decoration: none;
 }
 
 .site-header nav {
@@ -169,9 +175,9 @@ h1, .brand {
     display: none;
 }
 
-/* ============================================
-   SECTION HEADING (dipakai bersama: Experience, Education, Projects)
-   ============================================ */
+/* =====================================================
+        SECTION HEADING (Dipakai Pada Semua Section)
+   ===================================================== */
 .section-kicker {
     display: block;
     color: var(--gold);
@@ -205,9 +211,9 @@ h1, .brand {
     color: var(--text-muted);
 }
 
-/* ============================================
-   BUTTONS (dipakai bersama)
-   ============================================ */
+/* =====================================================
+        BUTTONS (Dipakai Bersama Semua Section)
+   ===================================================== */
 .button {
     display: inline-block;
     height: fit-content;
@@ -252,8 +258,227 @@ h1, .brand {
     background: var(--danger-tint);
 }
 
+/* ==============================================
+        FORMS (Dipakai Bersama Semua Section)
+   ============================================== */
+.project-form {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: var(--paper-alt);
+    color: var(--ink);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    font: inherit;
+    transition: border-color 0.2s ease, outline-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+}
+
+input[type="date"] {
+    color-scheme: light;
+}
+
+.form-group input[type="date"] {
+    background-color: var(--paper-alt);
+    color: var(--ink);
+    height: 52px;
+    padding: 0 1rem;
+}
+
+.form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 52px;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23d6472c'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 1rem;
+    cursor: pointer;
+}
+
+.form-group select option {
+    background-color: var(--paper-alt);
+    color: var(--ink);
+}
+
+.form-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+}
+
+.form-help {
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.form-help ul {
+    margin: 0.25rem 0 0 1.1rem;
+}
+
+/* ===========================
+            ALERTS
+   =========================== */
+.alert {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    border-left: 3px solid var(--line);
+}
+
+.alert-success {
+    background: var(--success-soft);
+    border: 1px solid var(--success-line);
+    border-left: 3px solid var(--success);
+    color: var(--success);
+}
+
+.alert-error {
+    background: var(--error-soft);
+    border: 1px solid var(--error-line);
+    border-left: 3px solid var(--accent);
+    color: var(--error);
+}
+
+.alert-warning {
+    background: var(--warning-soft);
+    border: 1px solid var(--warning-line);
+    border-left: 3px solid var(--warning);
+    color: var(--warning);
+}
+.alert-info {
+    background: var(--info-soft);
+    border: 1px solid var(--info-line);
+    border-left: 3px solid var(--info);
+    color: var(--info);
+}
+
+/* =========================
+        STAR BUTTON 
+   ========================= */
+.star-form {
+    display: inline;
+}
+
+.button-star {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--ink);
+}
+
+.button-star.is-starred {
+    background: var(--gold);
+}
+
+.star-count {
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    background: --overlay-light;
+    font-size: 0.8rem;
+}
+
+/* =================================================
+   CARD (Dipakai bersama : Experience dan Projects)
+   ================================================= */
+.experience-card,
+.project-card {
+    background-color: var(--paper-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.experience-card:hover,
+.project-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold);
+    box-shadow:
+        var(--shadow-card)
+}
+
+.experience-category,
+.project-category {
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.experience-description,
+.project-description {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.experience-status {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gold);
+}
+
 /* ============================================
-   HERO / SECTION PROFILE
+    ACTIONS (Dipakai Bersama Semua Section)
+   ============================================ */
+.experience-actions,
+.edu-actions,
+.project-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+
+.experience-actions .button,
+.edu-actions .button,
+.project-actions .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    height: 44px;
+    padding: 0 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ============================================
+            HERO / SECTION PROFILE
    ============================================ */
 .hero {
     padding: 4.5rem 0 5rem;
@@ -319,30 +544,57 @@ h1, .brand {
 .meta-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.25rem 2rem;
+    gap: 12px;
     margin-bottom: 1.75rem;
-    padding: 1rem 1.25rem;
-    border-radius: var(--radius);
-    background-color: var(--surface);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.meta-list:hover {
+.meta-row {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--paper-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    opacity: 0;
+    animation: meta-rise 0.4s ease-out both;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.meta-row:nth-child(1) { 
+    animation-delay: 0.1s; 
+}
+
+.meta-row:nth-child(2) { 
+    animation-delay: 0.2s; 
+}
+
+.meta-row::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--gold);
+}
+
+.meta-row:hover {
     transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--gold);
 }
 
 .meta-row dt {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--gold);
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.35rem;
+    font-weight: 700;
 }
 
 .meta-row dd {
     font-weight: 600;
+    font-size: 1.05rem;
     color: var(--ink);
 }
 
@@ -497,6 +749,11 @@ h1, .brand {
 }
 
 /* animations */
+@keyframes meta-rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes rec-pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.35; }
@@ -513,51 +770,7 @@ h1, .brand {
 }
 
 /* ============================================
-   CARD (dasar dipakai bersama: Experience & Projects)
-   ============================================ */
-.experience-card,
-.project-card {
-    background-color: var(--paper-alt);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.experience-card:hover,
-.project-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--gold);
-    box-shadow:
-        var(--shadow-card)
-}
-
-.experience-category,
-.project-category {
-    color: var(--gold);
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.experience-description,
-.project-description {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.experience-status {
-    margin-top: 0.25rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--gold);
-}
-
-/* ============================================
-   SECTION: EXPERIENCE
+                SECTION: EXPERIENCE
    ============================================ */
 .experience-section,
 .project-section {
@@ -657,7 +870,7 @@ h1, .brand {
 }
 
 /* ============================================
-   SECTION: EDUCATION
+                SECTION: EDUCATION
    ============================================ */
 .education-section {
     position: relative;
@@ -683,11 +896,6 @@ h1, .brand {
     animation: frame-in 0.5s ease-out var(--edu-delay) forwards;
 }
 
-@keyframes frame-in {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 .edu-connector {
     position: absolute;
     left: -58px;
@@ -705,11 +913,6 @@ h1, .brand {
     transform: scaleY(0);
     animation: segment-grow 0.7s ease-out calc(var(--edu-delay) - 0.2s) both;
     z-index: 1;
-}
-
-@keyframes segment-grow {
-    from { transform: scaleY(0); }
-    to { transform: scaleY(1); }
 }
 
 .edu-logo-frame {
@@ -750,12 +953,6 @@ h1, .brand {
     right: -1px;
     border-left: none;
     border-top: none;
-}
-
-@keyframes shutter-flash {
-    0% { box-shadow: 0 0 0 0 rgba(245, 243, 238, 0); }
-    15% { box-shadow: 0 0 24px 4px rgba(245, 243, 238, 0.9); }
-    100% { box-shadow: 0 0 0 0 rgba(245, 243, 238, 0); }
 }
 
 .edu-logo-frame img {
@@ -802,30 +999,21 @@ h1, .brand {
     line-height: 1.6;
 }
 
-/* ============================================
-   ACTIONS (dipakai bersama: Education & Projects)
-   ============================================ */
-.experience-actions,
-.edu-actions,
-.project-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 0.75rem;
+/* animations */
+@keyframes frame-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.experience-actions .button,
-.edu-actions .button,
-.project-actions .button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 90px;
-    height: 44px;
-    padding: 0 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
+@keyframes segment-grow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+@keyframes shutter-flash {
+    0% { box-shadow: 0 0 0 0 rgba(245, 243, 238, 0); }
+    15% { box-shadow: 0 0 24px 4px rgba(245, 243, 238, 0.9); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 243, 238, 0); }
 }
 
 /* ============================================
@@ -1009,162 +1197,15 @@ h1, .brand {
 }
 
 /* ============================================
-   FORMS (Project & Education, form-group dipakai bersama)
-   ============================================ */
-.project-form {
-    width: 100%;
-    max-width: 600px;
-    margin-top: 1.5rem;
-}
-
-.form-group {
-    margin-bottom: 1.25rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.4rem;
-    font-weight: 700;
-    color: var(--ink);
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 0.7rem;
-    background-color: var(--paper-alt);
-    color: var(--ink);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    font: inherit;
-    transition: border-color 0.2s ease, outline-color 0.2s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    outline: 2px solid var(--accent);
-    border-color: var(--accent);
-}
-
-input[type="date"] {
-    color-scheme: light;
-}
-
-.form-group input[type="date"] {
-    background-color: var(--paper-alt);
-    color: var(--ink);
-    height: 52px;
-    padding: 0 1rem;
-}
-
-.form-group select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    height: 52px;
-    padding-right: 2.5rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23d6472c'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.85rem center;
-    background-size: 1rem;
-    cursor: pointer;
-}
-
-.form-group select option {
-    background-color: var(--paper-alt);
-    color: var(--ink);
-}
-
-.form-error {
-    color: #ff6b5a;
-    font-size: 0.85rem;
-    margin-top: 0.35rem;
-}
-
-.form-help {
-    margin-top: 0.35rem;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    line-height: 1.5;
-}
-
-.form-help ul {
-    margin: 0.25rem 0 0 1.1rem;
-}
-
-/* ============================================
-   ALERTS
-   ============================================ */
-.alert {
-    margin-top: 1rem;
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius);
-    font-size: 0.9rem;
-    border-left: 3px solid var(--line);
-}
-
-.alert-success {
-    background: var(--success-soft);
-    border: 1px solid var(--success-line);
-    border-left: 3px solid var(--success);
-    color: var(--success);
-}
-
-.alert-error {
-    background: var(--error-soft);
-    border: 1px solid var(--error-line);
-    border-left: 3px solid var(--accent);
-    color: var(--error);
-}
-
-.alert-warning {
-    background: var(--warning-soft);
-    border: 1px solid var(--warning-line);
-    border-left: 3px solid var(--warning);
-    color: var(--warning);
-}
-.alert-info {
-    background: var(--info-soft);
-    border: 1px solid var(--info-line);
-    border-left: 3px solid var(--info);
-    color: var(--info);
-}
-
-/* =============
-   STAR BUTTON 
-   ============= */
-.star-form {
-    display: inline;
-}
-
-.button-star {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: var(--ink);
-}
-
-.button-star.is-starred {
-    background: var(--gold);
-}
-
-.star-count {
-    padding: 0.05rem 0.4rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.25);
-    font-size: 0.8rem;
-}
-
-/* ============================================
-   RESPONSIVE (max-width: 600px)
+            RESPONSIVE (max-width: 600px)
    ============================================ */
 @media (max-width: 600px) {
+    /* --- Global / Base --- */
     body {
         background-attachment: scroll;
     }
 
+    /* --- Header --- */
     @keyframes nav-drop {
         from { opacity: 0; transform: translateY(-8px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -1247,6 +1288,7 @@ input[type="date"] {
         transform: translateY(-7px) rotate(-45deg);
     }
 
+    /* --- Hero / Section Profile --- */
     .hero-grid {
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -1269,14 +1311,20 @@ input[type="date"] {
         grid-template-columns: 1fr;
     }
 
+    .meta-row:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
     .section-title {
         font-size: 2rem;
     }
 
+    /* --- Section: Experience --- */
     .experience-grid .experience-card {
         flex: 0 0 220px;
     }
 
+    /* --- Section: Education --- */
     .education-timeline {
         padding-left: 74px;
     }
@@ -1295,6 +1343,7 @@ input[type="date"] {
         font-size: 1.2rem;
     }
 
+    /* --- Section: Projects --- */
     .project-header {
         flex-direction: column;
         align-items: flex-start;
