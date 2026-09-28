@@ -74,7 +74,9 @@ def logout_user(request):
 #Experience
 def get_experience_json(request):
     experience_list = Experience.objects.all()
-    experience_json = serializers.serialize("json", experience_list)
+    experience_json = serializers.serialize(
+        "json", experience_list, fields=("title", "description", "category", "thumbnail", "started_at", "ended_at")
+    )
     return HttpResponse(experience_json, content_type="application/json")
 
 def show_experience(request):
@@ -234,7 +236,7 @@ def get_projects_json(request):
         projects = projects.filter(title__icontains=title_query)
 
     projects_json = serializers.serialize(
-        "json", projects
+        "json", projects, fields=("title", "description", "skills_used", "project_url", "project_image_url"),
     )
     return HttpResponse(projects_json, content_type="application/json")
 

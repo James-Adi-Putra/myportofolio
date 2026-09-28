@@ -53,8 +53,8 @@ Saya meminta bantuan untuk desain css dari section education lalu saya melempark
 ## Tugas 3
 1. Karena field-nya otomatis di generate sesuai model yang udah saya definisikan di `models.py`. Jadi saya nggak perlu nulis satu-satu `<input>` buat tiap field, dan Django juga otomatis validasi tipe datanya misalnya field `URLField` bakal otomatis ditolak kalau isinya bukan link yang valid. Ini juga yang bikin saya bisa pakai form yang sama buat Create dan Update sekaligus, tinggal kasih parameter `instance=` waktu mau edit data yang udah ada, jadi nggak perlu bikin dua form terpisah.
 Soal `{% csrf_token %}`, itu wajib karena tanpa token ini form rawan kena serangan CSRF situs lain bisa aja bikin form palsu yang diam-diam ngirim request (misalnya hapus data) ke website pas lagi login, tanpa saya sadar. Token ini kayak "kode rahasia" yang Django kasih ke tiap form, dan Django cuma bakal proses submit kalau tokennya cocok. 
-2.Menurut saya JSON lebih enak dipakai karena strukturnya lebih ringkas dibanding XML nggak perlu nulis closing tag kayak `</tag>` di tiap elemen lebih ringkas juga sih
-3.Waktu endpoint `/api/education/` diakses, view `get_education_json` mengambil data lewat `Education.objects.all()`, lalu `serializers.serialize("json", ...)` mengubah objek Django itu jadi string JSON sebelum dikirim lewat `HttpResponse`. Serialization diperlukan karena objek Model Django adalah struktur data internal Python yang nggak bisa langsung dipahami sistem lain, jadi harus diterjemahkan dulu ke format teks universal. `show_education` juga sengaja mengambil datanya lewat proses serialize-deserialize ini, bukan langsung query database, supaya polanya sama seperti data yang datang dari API terpisah
+2. Menurut saya JSON lebih enak dipakai karena strukturnya lebih ringkas dibanding XML nggak perlu nulis closing tag kayak `</tag>` di tiap elemen lebih ringkas juga sih
+3. Waktu endpoint `/api/education/` diakses, view `get_education_json` mengambil data lewat `Education.objects.all()`, lalu `serializers.serialize("json", ...)` mengubah objek Django itu jadi string JSON sebelum dikirim lewat `HttpResponse`. Serialization diperlukan karena objek Model Django adalah struktur data internal Python yang nggak bisa langsung dipahami sistem lain, jadi harus diterjemahkan dulu ke format teks universal. `show_education` juga sengaja mengambil datanya lewat proses serialize-deserialize ini, bukan langsung query database, supaya polanya sama seperti data yang datang dari API terpisah
 
 ## Strategi Prompting
 Aku menggunakan pendekatan step-by-step: meminta satu langkah dulu, mencoba menjalankannya sendiri, baru meminta lanjutan atau bantuan debug kalau menemukan error
@@ -70,3 +70,24 @@ Saya menggunakan Claude (Anthropic) sebagai bantuan dalam beberapa bagian tugas 
 3. Debug awal mandiri sebelum minta bantuan AI, seperti waktu menemukan ada fungsi `delete_project` yang terduplikasi di `views.py` sehingga password check tidak berjalan
 ## Refleksi Proses
 Selama proses ini saya jadi tau bagaimana cara kerja django admin dengan membuat sistem CRUD sendiri sebelum ini saya memasukkan data secara manual menggunakan superuser di django admin tanpa tau cara build dari nol. Dengan bantuan AI untuk melakukan refactor pada struktur CSS tentunya karena ada beberapa code CSS yang redundan dan perlu disederhanakan next akan melanjutkan tutorial 4 dulu sambil memperbaiki beberapa tampilan notifikasi dan css lain yang masih mau diubah.
+
+
+## Tugas 4
+## Strategi Prompting
+Saya menanyakan hal yang menurut saya perlu diklarifikasi seperti bagian sensitif di json itu apa saja, lalu saya meminta AI untuk mencatat checkpoint yang sudah saya kerjakan 
+## AI Disclosure
+Saya menggunakan Claude (Anthropic) dan Deepseak sebagai bantuan dalam beberapa bagian tugas ini, dengan rincian sebagai berikut:
+1. Menjelaskan konsep otorisasi, CSRF, dan ManyToMany.
+2. Meninjau kebocoran data di endpoint JSON 
+3. Merapikan dan mengorganisasi ulang CSS, serta usulan desain kotak NPM dan Program.
+4. Membuat palete warna CSS dan mengelompokkan shadow di bagian root agar tidak hardcode langsung di code lagi
+5. Membantuku aku dalam membagi dan menjelaskan perah superUser, Editor, dan User biasa
+## Bagian yang saya kerjakan sendiri : 
+1. Mencari bug yang masih terdapat pada website ku yaitu bug EndPoint JSON dan bug CSS
+2. Melakukan desain CSS dengan merubah warna desain yang awalnya dominan putih merah menjadi dominan putih gold agar lebih cerah dan terlihat di background hitam
+3. Melakukan perubahan tata letak posisi riwayat login/cookie
+4. Mengganti foto di bagian profile karena dirasa kurang sesuai dari sebelumnya
+AI sempat menebak penyebab yang salah juga Saat editor mendapat 404, awalnya diarahkan ke masalah izin, padahal penyebabnya URL yang saya ketik manual dengan UUID tidak valid. Saya baru menemukan penyebab sebenarnya setelah mencoba lewat tombol di halaman
+Saya juga memutuskan sendiri untuk tetap memakai teknik yang diajarkan di tutorial ketika AI menawarkan pendekatan lain yang belum saya pahami
+## Refleksi Proses
+Selama proses ini saya jadi paham peran user dalam suatu web dengan pembagian peran authorization siapa yang bisa melakukan ini siapa yang tidak dan saya jadi lebih tau bahwa EndPoint JSON penulisan dan implementasinya harus hati-hati dari data sensitif.

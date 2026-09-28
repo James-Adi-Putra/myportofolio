@@ -17,7 +17,7 @@ class ExperienceForm(ModelForm):
             "title": "Judul Pengalaman",
             "description": "Deskripsi",
             "category": "Kategori",
-            "thumbnail": "Nama File Gambar",
+            "thumbnail": "URL Gambar",
             "ended_at": "Tanggal Selesai (kosongkan jika masih berlangsung)",
         }
 
