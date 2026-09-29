@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm, TextInput, Textarea, URLInput
 from main.models import Experience, Education, Project
+from django.utils.html import strip_tags
 
 class ExperienceForm(ModelForm):
     class Meta:
@@ -121,7 +122,19 @@ class ProjectForm(ModelForm):
             ),
             "project_image_url": URLInput(
                 attrs={
-                    "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w200",
+                    "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w600",
                 }
             ),
         }
+
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data["title"]).strip()
+        if not title:
+            raise forms.ValidationError("Nama proyek tidak boleh hanya berisi tag HTML.")
+        return title
+
+    def clean_skills_used(self):
+        return strip_tags(self.cleaned_data["skills_used"]).strip()
+
+    def clean_description(self):
+        return strip_tags(self.cleaned_data["description"]).strip()
