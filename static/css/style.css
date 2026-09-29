@@ -175,6 +175,16 @@ h1, .brand {
     display: none;
 }
 
+/* ============================================
+   FOOTER
+   ============================================ */
+.site-footer {
+    padding: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--line);
+}
+
 /* =====================================================
         SECTION HEADING (Dipakai Pada Semua Section)
    ===================================================== */
@@ -1195,6 +1205,50 @@ input[type="date"] {
     gap: 0.75rem;
     margin-top: 1.5rem;
 }
+
+/* ============================================
+   TOAST NOTIFICATION
+   ============================================ */
+.toast-component {
+  position: fixed;
+  inset: auto 2rem 2rem auto;
+  margin: 0;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  color: inherit;
+}
+.toast-component:popover-open {
+  display: flex;
+}
+.toast-hidden {
+  opacity: 0;
+  transform: translateY(150%);
+  pointer-events: none;
+}
+.toast-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+  font-family: var(--font-display);
+}
+.toast-message {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.toast-success { border-left: 4px solid var(--success); }
+.toast-error { border-left: 4px solid var(--danger); }
+.toast-normal { border-left: 4px solid var(--accent); }
 
 /* ============================================
             RESPONSIVE (max-width: 600px)
