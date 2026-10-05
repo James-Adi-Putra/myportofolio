@@ -73,6 +73,7 @@ Selama proses ini saya jadi tau bagaimana cara kerja django admin dengan membuat
 
 
 ## Tugas 4
+1. 
 ## Strategi Prompting
 Saya menanyakan hal yang menurut saya perlu diklarifikasi seperti bagian sensitif di json itu apa saja, lalu saya meminta AI untuk mencatat checkpoint yang sudah saya kerjakan 
 ## AI Disclosure
@@ -91,3 +92,26 @@ AI sempat menebak penyebab yang salah juga Saat editor mendapat 404, awalnya dia
 Saya juga memutuskan sendiri untuk tetap memakai teknik yang diajarkan di tutorial ketika AI menawarkan pendekatan lain yang belum saya pahami
 ## Refleksi Proses
 Selama proses ini saya jadi paham peran user dalam suatu web dengan pembagian peran authorization siapa yang bisa melakukan ini siapa yang tidak dan saya jadi lebih tau bahwa EndPoint JSON penulisan dan implementasinya harus hati-hati dari data sensitif.
+
+
+## Tugas 5
+1. Debouncing ini teknik menunda eksekusi fungsi sampai pengguna berhenti melakukan input selama waktu tertentu. Pada fitur pencarian AJAX, gunanya supaya setiap karakter yang diketik tidak langsung mengirim request ke server. Jadi request hanya dikirim setelah pengguna selesai ketik beberapa saat hingga kurangi jumalah req dan buat pencarian lebih efisien
+2. await digunakan untuk menunggu Promise dari fetch() selesai sebelum kode dilanjutkan ke baris berikutnya. Dengan begitu, kita bisa menggunakan hasil dari request tersebut dengan benar. Kalau tidak pakai fecth() jalan di belakang layar dan kode berikutnya dijalankan tanpa tunggu hasil jadi hasil response belum tentu tersedia saat dibutuhkan
+3. XSS adalah serangan ketika seseorang sisipkan kode JavaScript berbahaya dalam data yang kemudian dijalankan di browser pengguna lain.
+Jadi Django template udah membantu melakukan escaping, sedangkan ketika data dirender lewat JavaScript kita lakukan pelrindungan XSS sendiri, contoh dengan escapeHtml() atau dengan textContent
+## Strategi Prompting
+Saya menanyakan hal yang menurut saya perlu diklarifikasi seperti pembuatan AJAX dan kolom search bar debouncing untuk bagian section education
+## AI Disclosure
+Saya menggunakan Claude (Anthropic) dan Deepseak sebagai bantuan dalam beberapa bagian tugas ini, dengan rincian sebagai berikut:
+1. Menjelaskan strategi refactor untuk section education
+2. Apa yang perlu dipertimbangkan untuk mengimplementasi yang dipelajari di tutorial dengan tugas ini
+3. Membantu aku menyusun bagian yang perlu diubah dan tata letaknya
+## Bagian yang saya kerjakan sendiri :
+1. Menulis code pengisian dengan AJAX pada code education berpaku pada bagian project yang dikerjakan di tutorial
+2. Menanmbahkan seacrh bar dan star untuk bagian education
+3. Mengatur debouncing 300 milidetik sama seperti tutorial
+4. Membuat form modal untuk education
+5. Saya pakai CSS existing dari Tugas 3–4 tanpa bantuan AI
+6. Saya test end-to-end di browser, cek DevTools, cek XSS payload
+## Refleksi Proses
+Saya menemukan route `create_education_ajax` belum terdaftar setelah AI memberi view-nya. Saya tambahkan sendiri path-nya dan memastikan import-nya lengkap. AI cenderung membuat pola baru daripada mengikuti konvensi yang sudah ada, sehingga berisiko menciptakan inkonsistensi, jadi saya berusaha untuk merefactor mandiri kali ini karena ingin belajar juga untuk persiapan kuis 2
