@@ -13,7 +13,7 @@ class MainTest(TestCase):
             thumbnail="mentor.svg",
         )
 
-        #Education
+        #Education  
         self.education = Education.objects.create(
             institution="Universitas Indonesia",
             degree="S1 Sistem Informasi",
