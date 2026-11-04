@@ -8,11 +8,8 @@
         <div class="container">
             <h1>{% if education %}Edit Education{% else %}Add Education{% endif %}</h1>
             <form method="POST"
-                  action="
-                  {% if education %}
-                  {% url 'main:update_education' education.id %}
-                  {% else %}
-                  {% url 'main:create_education' %}{% endif %}"
+                  id="education-edit-form"
+                  action="{% if education %}{% url 'main:update_education' education.id %}{% else %}{% url 'main:create_education' %}{% endif %}"
                   class="project-form">
                 {% csrf_token %}
                 {% for field in form %}
@@ -36,4 +33,58 @@
         </div>
     </section>
 </main>
+
+{% if education %}
+<script>
+    const UPDATE_EDUCATION_ENDPOINT = "{% url 'api:education-detail' education.id %}";
+    const EDUCATION_LIST_URL = "{% url 'main:show_education' %}";
+    const editForm = document.getElementById('education-edit-form');
+
+    function getCookie(name) {
+        const prefix = `${name}=`;
+        const cookie = document.cookie.split(';').map(value => value.trim())
+            .find(value => value.startsWith(prefix));
+        return cookie ? decodeURIComponent(cookie.slice(prefix.length)) : null;
+    }
+
+    function apiErrorMessage(data, status) {
+        const messages = Object.values(data).flat().filter(value => typeof value === 'string');
+        return messages.join(' ') || `Terjadi kesalahan (HTTP ${status}).`;
+    }
+
+    editForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const submitButton = editForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        try {
+            const fields = new FormData(editForm);
+            const endedAt = String(fields.get('ended_at') || '').trim();
+            const payload = {
+                institution: fields.get('institution'),
+                degree: fields.get('degree'),
+                level: fields.get('level'),
+                description: fields.get('description'),
+                logo: fields.get('logo'),
+                ended_at: endedAt ? `${endedAt}T00:00:00` : null,
+            };
+            const response = await fetch(UPDATE_EDUCATION_ENDPOINT, {
+                method: 'PATCH',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify(payload),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(apiErrorMessage(data, response.status));
+            showToast('Berhasil', 'Riwayat pendidikan berhasil diperbarui!', 'success');
+            setTimeout(() => { window.location.href = EDUCATION_LIST_URL; }, 800);
+        } catch (error) {
+            showToast('Gagal memperbarui pendidikan', error.message, 'error');
+            submitButton.disabled = false;
+        }
+    });
+</script>
+{% endif %}
 {% endblock content %}
