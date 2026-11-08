@@ -1,16 +1,22 @@
 /**
- * Cinematic Animations for Personal Portfolio
- * - Page Entrance: Aperture focus & subtle zoom-in
- * - Hero Photo: Interactive 3D Viewfinder mouse tracking & parallax
- * - 3D Interactive Card Tilt with specular light (Projects & Experience)
- * - Dynamic Staggered Reveal for AJAX cards
- * - Respects prefers-reduced-motion for accessibility
+ * Cinematic Animations & Interactive UX for Personal Portfolio
+ * - Page Load Entrance: Aperture zoom & focus
+ * - Hero 3D Parallax & Viewfinder Mouse Tracking
+ * - Specular 3D Card Tilt for Projects & Experience
+ * - JavaScript-driven Animated Hamburger Navigation
+ * - Academic Journey Milestone Animation for Education
+ * - Dynamic Staggered Reveal for AJAX Cards
+ * - Full prefers-reduced-motion Accessibility Support
  */
 
 (function () {
+    'use strict';
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // 1. Page Load Entrance (Cinematic Focus & Zoom)
+    // ========================================================
+    // 1. Page Load Entrance: Camera Lens Focus & Zoom
+    // ========================================================
     function initPageEntrance() {
         if (prefersReducedMotion) {
             document.body.classList.add('page-loaded');
@@ -21,7 +27,9 @@
         });
     }
 
-    // 2. Hero Profile Interactive 3D Parallax & Viewfinder Tracking
+    // ========================================================
+    // 2. Hero Profile Interactive 3D Parallax & Viewfinder
+    // ========================================================
     function initHeroParallax() {
         if (prefersReducedMotion || window.innerWidth < 768) return;
 
@@ -62,7 +70,9 @@
         });
     }
 
-    // 3. Interactive 3D Polaroid Tilt (Khusus Project & Experience Card)
+    // ========================================================
+    // 3. 3D Interactive Card Tilt (Projects & Experience)
+    // ========================================================
     function initInteractiveTilt() {
         if (prefersReducedMotion || window.innerWidth < 768) return;
 
@@ -81,10 +91,10 @@
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
 
-                    const rotateX = ((y - centerY) / centerY) * -6;
-                    const rotateY = ((x - centerX) / centerX) * 6;
+                    const rotateX = ((y - centerY) / centerY) * -5;
+                    const rotateY = ((x - centerX) / centerX) * 5;
 
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-5px)`;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
                     card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
                     card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
                     card.classList.add('is-tilting');
@@ -102,7 +112,142 @@
         });
     }
 
-    // 4. Staggered Scroll & AJAX Reveal
+    // ========================================================
+    // 4. JavaScript-driven Animated Hamburger Navigation
+    // ========================================================
+    function initMobileNav() {
+        const toggleBtn = document.getElementById('nav-toggle');
+        const siteNav = document.getElementById('site-nav');
+        const header = document.querySelector('.site-header');
+
+        if (!toggleBtn || !siteNav) return;
+
+        function closeNav() {
+            toggleBtn.classList.remove('is-active');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            toggleBtn.setAttribute('aria-label', 'Buka menu navigasi');
+            siteNav.classList.remove('is-open');
+            document.body.classList.remove('nav-open');
+            if (header) header.classList.remove('nav-open');
+        }
+
+        function openNav() {
+            toggleBtn.classList.add('is-active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+            toggleBtn.setAttribute('aria-label', 'Tutup menu navigasi');
+            siteNav.classList.add('is-open');
+            document.body.classList.add('nav-open');
+            if (header) header.classList.add('nav-open');
+        }
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = toggleBtn.classList.contains('is-active');
+            if (isOpen) {
+                closeNav();
+            } else {
+                openNav();
+            }
+        });
+
+        // Close on clicking nav links
+        siteNav.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                closeNav();
+            }
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (toggleBtn.classList.contains('is-active') && !header.contains(e.target)) {
+                closeNav();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && toggleBtn.classList.contains('is-active')) {
+                closeNav();
+                toggleBtn.focus();
+            }
+        });
+
+        // Reset if window resizes to desktop width
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && toggleBtn.classList.contains('is-active')) {
+                closeNav();
+            }
+        });
+    }
+
+    // ========================================================
+    // 5. Academic Journey Animation (Education Timeline)
+    // ========================================================
+    function initEducationJourney() {
+        const timeline = document.getElementById('edu-timeline');
+        if (!timeline) return;
+
+        const frames = Array.from(timeline.querySelectorAll('.edu-frame'));
+        if (frames.length === 0) return;
+
+        if (prefersReducedMotion) {
+            frames.forEach(frame => frame.classList.add('journey-active'));
+            return;
+        }
+
+        // Staggered chronological unveiling
+        frames.forEach((frame, index) => {
+            frame.style.setProperty('--journey-index', index);
+
+            // Mark current / latest university milestone at the top
+            if (index === 0 && frame.classList.contains('is-current')) {
+                frame.classList.add('milestone-top');
+            }
+        });
+
+        // IntersectionObserver to sequentially activate journey milestones as user scrolls
+        const journeyObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const idx = Number(target.style.getPropertyValue('--journey-index') || 0);
+
+                    setTimeout(() => {
+                        target.classList.add('journey-active');
+                    }, idx * 140);
+
+                    observer.unobserve(target);
+                }
+            });
+        }, {
+            threshold: 0.12,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        frames.forEach(frame => {
+            if (!frame.classList.contains('journey-active')) {
+                journeyObserver.observe(frame);
+            }
+        });
+
+        // Interactive connector lighting when hovering past milestones
+        frames.forEach(frame => {
+            frame.addEventListener('mouseenter', () => {
+                frame.classList.add('is-journey-focus');
+                const connector = frame.querySelector('.edu-connector');
+                if (connector) connector.classList.add('connector-glow');
+            });
+            frame.addEventListener('mouseleave', () => {
+                frame.classList.remove('is-journey-focus');
+                const connector = frame.querySelector('.edu-connector');
+                if (connector) connector.classList.remove('connector-glow');
+            });
+        });
+    }
+
+    // ========================================================
+    // 6. Staggered Scroll & AJAX Reveal
+    // ========================================================
     function initScrollReveal() {
         if (prefersReducedMotion) return;
 
@@ -131,6 +276,7 @@
 
         observeCards(document.body);
 
+        // Watch dynamic AJAX containers
         const targetContainers = ['grid', 'exp-grid'];
         targetContainers.forEach(id => {
             const el = document.getElementById(id);
@@ -141,20 +287,37 @@
                 mutationObs.observe(el, { childList: true });
             }
         });
+
+        // Watch education timeline mutations for dynamic AJAX reload
+        const eduTimeline = document.getElementById('edu-timeline');
+        if (eduTimeline) {
+            const eduMutationObs = new MutationObserver(() => {
+                initEducationJourney();
+            });
+            eduMutationObs.observe(eduTimeline, { childList: true });
+        }
     }
 
-    // Initialize all enhancements on DOM ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            initPageEntrance();
-            initHeroParallax();
-            initInteractiveTilt();
-            initScrollReveal();
-        });
-    } else {
+    // ========================================================
+    // Initialization Bootstrap
+    // ========================================================
+    function bootstrap() {
         initPageEntrance();
         initHeroParallax();
         initInteractiveTilt();
+        initMobileNav();
+        initEducationJourney();
         initScrollReveal();
     }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootstrap);
+    } else {
+        bootstrap();
+    }
+
+    // Listen to custom event when AJAX finishes loading education data
+    document.addEventListener('educationLoaded', () => {
+        initEducationJourney();
+    });
 })();

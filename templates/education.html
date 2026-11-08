@@ -108,14 +108,16 @@
 
     function buildEducationFrameElement(education, index, isLast) {
         const frameElement = document.createElement('div');
-        frameElement.className = 'edu-frame';
+        frameElement.className = `edu-frame${education.is_ongoing ? ' is-current' : ''}`;
         frameElement.style.setProperty('--edu-index', index);
 
         const logoHtml = education.logo
             ? `<img src="${escapeHtml(education.logo)}" alt="Logo ${escapeHtml(education.institution)}">`
             : '';
 
-        const statusText = education.is_ongoing ? 'Sedang berlangsung' : 'Selesai';
+        const statusHtml = education.is_ongoing
+            ? `<p class="edu-status edu-status--ongoing"><span class="edu-status-pulse"></span>Sedang berlangsung</p>`
+            : `<p class="edu-status edu-status--completed">Selesai</p>`;
 
         const descriptionHtml = education.description
             ? `<p class="edu-description">${escapeHtml(education.description)}</p>`
@@ -159,7 +161,7 @@
                 <span class="edu-level">${escapeHtml(education.level_display)}</span>
                 <h2>${escapeHtml(education.institution)}</h2>
                 <p class="edu-degree">${escapeHtml(education.degree)}</p>
-                <p class="edu-status">${statusText}</p>
+                ${statusHtml}
                 ${descriptionHtml}
                 <div class="edu-actions">
                     ${starHtml}
@@ -186,6 +188,7 @@
                 headers: { Accept: 'application/json' },
                 signal: educationAbortController.signal,
             });
+
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const educations = await response.json();
@@ -198,6 +201,7 @@
                 showTimeline: educations.length > 0,
                 showEmpty: educations.length === 0,
             });
+
         } catch (error) {
             if (error.name === 'AbortError') return;
             console.error('Error loading education:', error);
