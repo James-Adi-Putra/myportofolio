@@ -75,20 +75,29 @@ class MainTest(TestCase):
         response = self.client.get(reverse("main:show_education"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "education.html")
-        self.assertContains(response, self.education.institution)
-        self.assertContains(response, self.education.degree)
-        self.assertContains(response, "Sedang berlangsung")
+        self.assertContains(response, 'id="edu-timeline"')
         self.assertContains(response, f'href="{reverse("main:show_main")}"')
+
+        data = self.client.get(reverse("main:get_education_json")).json()
+        self.assertEqual(data[0]["pk"], str(self.education.id))
+        self.assertEqual(data[0]["fields"]["institution"], self.education.institution)
+        self.assertEqual(data[0]["fields"]["degree"], self.education.degree)
+        self.assertTrue(data[0]["fields"]["is_ongoing"])
 
     def test_empty_education_page(self):
         Education.objects.all().delete()
         response = self.client.get(reverse("main:show_education"))
-        self.assertContains(response, "Belum ada riwayat pendidikan yang ditambahkan.")
+        self.assertContains(
+            response,
+            "Belum ada riwayat pendidikan yang ditambahkan atau ditemukan.",
+        )
+        data = self.client.get(reverse("main:get_education_json")).json()
+        self.assertEqual(data, [])
 
     def test_completed_education(self):
         self.education.ended_at = timezone.now()
         self.education.save()
-        response = self.client.get(reverse("main:show_education"))
         self.assertFalse(self.education.is_ongoing)
-        self.assertContains(response, "Selesai")
-        self.assertNotContains(response, "Sedang berlangsung")
+        data = self.client.get(reverse("main:get_education_json")).json()
+        self.assertFalse(data[0]["fields"]["is_ongoing"])
+        self.assertIsNotNone(data[0]["fields"]["ended_at"])
