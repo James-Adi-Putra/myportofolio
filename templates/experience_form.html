@@ -8,11 +8,8 @@
         <div class="container">
             <h1>{% if experience %}Edit Experience{% else %}Add New Experience{% endif %}</h1>
             <form method="POST"
-                  action="
-                  {% if experience %}
-                  {% url 'main:update_experience' experience.id %}
-                  {% else %}
-                  {% url 'main:create_experience' %}{% endif %}"
+                  id="experience-edit-form"
+                  action="{% if experience %}{% url 'main:update_experience' experience.id %}{% else %}{% url 'main:create_experience' %}{% endif %}"
                   class="project-form">
                 {% csrf_token %}
                 {% for field in form %}
@@ -36,4 +33,54 @@
         </div>
     </section>
 </main>
+
+{% if experience %}
+<script>
+    const UPDATE_EXP_ENDPOINT = "{% url 'api:experience-detail' experience.id %}";
+    const EXP_LIST_URL = "{% url 'main:show_experience' %}";
+    const editExpForm = document.getElementById('experience-edit-form');
+
+    function getCookie(name) {
+        const prefix = `${name}=`;
+        const cookie = document.cookie.split(';').map(v => v.trim()).find(v => v.startsWith(prefix));
+        return cookie ? decodeURIComponent(cookie.slice(prefix.length)) : null;
+    }
+
+    editExpForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = editExpForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        try {
+            const fd = new FormData(editExpForm);
+            const endedAt = String(fd.get('ended_at') || '').trim();
+            const payload = {
+                title: fd.get('title'),
+                description: fd.get('description'),
+                category: fd.get('category'),
+                thumbnail: fd.get('thumbnail'),
+                ended_at: endedAt ? `${endedAt}T00:00:00` : null,
+            };
+            const res = await fetch(UPDATE_EXP_ENDPOINT, {
+                method: 'PATCH',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify(payload),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                const msgs = Object.values(data).flat().filter(v => typeof v === 'string');
+                throw new Error(msgs.join(' ') || `HTTP ${res.status}`);
+            }
+            showToast('Berhasil', 'Pengalaman berhasil diperbarui!', 'success');
+            setTimeout(() => { window.location.href = EXP_LIST_URL; }, 800);
+        } catch (err) {
+            showToast('Gagal memperbarui pengalaman', err.message, 'error');
+            btn.disabled = false;
+        }
+    });
+</script>
+{% endif %}
 {% endblock content %}

@@ -13,56 +13,255 @@
                     <p class="section-subtitle">Tap or click a photo to view it up close!</p>
                 </div>
                 {% if user.is_superuser %}
-                <a href="{% url 'main:create_experience' %}" class="button project-add-button">
-                    <span aria-hidden="true">+</span>
-                    Tambah Pengalaman
-                </a>
+                <button type="button" class="button project-add-button" popovertarget="add-experience-modal">
+                    <span aria-hidden="true">+</span> Tambah Pengalaman
+                </button>
                 {% endif %}
             </div>
 
-            <div class="experience-grid">
-                {% for experience in experience_list %}
-                <article class="experience-card">
-                    <a href="#exp-photo-{{ forloop.counter }}" class="exp-photo-link">
-                        {% if experience.thumbnail %}
-                        <img src="{{ experience.thumbnail }}" alt="Foto {{ experience.title }}" class="exp-photo">
-                        {% endif %}
-                    </a>
-                    <div class="exp-body">
-                        <span class="experience-category">{{ experience.get_category_display }}</span>
-                        <h2>{{ experience.title }}</h2>
-                        <p class="experience-description">{{ experience.description }}</p>
-                        {% if experience.is_ongoing %}
-                        <p class="experience-status">Sedang berlangsung</p>
-                        {% else %}
-                        <p class="experience-status">Selesai</p>
-                        {% endif %}
-                        {% include "components/experience_star.html" with experience=experience %}
-                        <div class="experience-actions">
-                            {% if user.is_superuser or is_editor %}
-                            <a href="{% url 'main:update_experience' experience.id %}" class="button button-secondary">Edit</a>
-                            {% endif %}
-                            {% if user.is_superuser %}
-                            {% url 'main:delete_experience' experience.id as experience_delete_url %}
-                            {% include "components/confirm_delete.html" with delete_url=experience_delete_url item_label="Pengalaman" item_name=experience.title button_label="Hapus" %}
-                            {% endif %}
-                        </div>
-                    </div>
-                </article>
-                {% empty %}
-                <p class="empty-state">Belum ada pengalaman yang ditambahkan.</p>
-                {% endfor %}
+            <form id="experience-search-form" class="project-search">
+                <input type="search"
+                    id="experience-search-input"
+                    name="title"
+                    placeholder="Cari berdasarkan judul pengalaman"
+                    class="project-search__input"
+                    aria-label="Cari berdasarkan judul pengalaman">
+                <button type="submit" class="button">Cari</button>
+            </form>
+
+            <div id="exp-loading" class="empty-state hide">
+                <p>Memuat pengalaman...</p>
             </div>
+
+            <div id="exp-error" class="empty-state hide">
+                <p>Gagal memuat data pengalaman. Silakan coba lagi.</p>
+            </div>
+
+            <div id="exp-empty" class="empty-state hide">
+                <p>Belum ada pengalaman yang ditambahkan atau ditemukan.</p>
+            </div>
+
+            <div id="exp-grid" class="experience-grid hide"></div>
         </div>
+
+        {% if user.is_superuser %}
+            {% include "components/experience_form_modal.html" %}
+        {% endif %}
     </section>
 </main>
 
-{% for experience in experience_list %}
-{% if experience.thumbnail %}
-<div class="lightbox" id="exp-photo-{{ forloop.counter }}">
-    <a href="#" class="lightbox-close">&times;</a>
-    <img src="{{ experience.thumbnail }}" alt="Foto {{ experience.title }} (besar)">
-</div>
-{% endif %}
-{% endfor %}
+<div id="lightbox-container"></div>
+
+{% csrf_token %}
+<script>
+    const BASE_EXP_ENDPOINT = "{% url 'api:experience-list' %}";
+    const DETAIL_EXP_ENDPOINT = "{% url 'api:experience-detail' '00000000-0000-0000-0000-000000000000' %}";
+    const STAR_EXP_ENDPOINT = "{% url 'api:experience-star' '00000000-0000-0000-0000-000000000000' %}";
+    const EDIT_EXP_ENDPOINT = "{% url 'main:update_experience' '00000000-0000-0000-0000-000000000000' %}";
+    const LOGIN_URL = "{% url 'main:login' %}";
+    const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
+    const IS_EDITOR = "{{ is_editor|yesno:'true,false' }}" === "true";
+    const IS_AUTHENTICATED = "{{ user.is_authenticated|yesno:'true,false' }}" === "true";
+    const SEARCH_DEBOUNCE_DELAY = 300;
+    const DUMMY_UUID = '00000000-0000-0000-0000-000000000000';
+
+    const expLoadingState = document.getElementById('exp-loading');
+    const expErrorState = document.getElementById('exp-error');
+    const expEmptyState = document.getElementById('exp-empty');
+    const expGridContainer = document.getElementById('exp-grid');
+    const expSearchForm = document.getElementById('experience-search-form');
+    const expSearchInput = document.getElementById('experience-search-input');
+    const experienceForm = document.getElementById('experience-form');
+    const addExpModal = document.getElementById('add-experience-modal');
+    const lightboxContainer = document.getElementById('lightbox-container');
+
+    let expAbortController;
+    let expSearchDebounceTimer;
+
+    function getCookie(name) {
+        const prefix = `${name}=`;
+        const cookie = document.cookie.split(';').map(v => v.trim()).find(v => v.startsWith(prefix));
+        return cookie ? decodeURIComponent(cookie.slice(prefix.length)) : null;
+    }
+
+    function escapeHtml(val) {
+        return String(val ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function expEndpoint(pattern, id) {
+        return pattern.replace(DUMMY_UUID, id);
+    }
+
+    function displayExpSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
+        expLoadingState.classList.toggle('hide', !showLoading);
+        expErrorState.classList.toggle('hide', !showError);
+        expEmptyState.classList.toggle('hide', !showEmpty);
+        expGridContainer.classList.toggle('hide', !showGrid);
+    }
+
+    function buildExperienceCard(exp, index) {
+        const article = document.createElement('article');
+        article.className = 'experience-card';
+
+        const photoHtml = exp.thumbnail
+            ? `<a href="#exp-photo-${index}" class="exp-photo-link">
+                 <img src="${escapeHtml(exp.thumbnail)}" alt="Foto ${escapeHtml(exp.title)}" class="exp-photo">
+               </a>`
+            : '';
+
+        const starTitle = exp.star_count > 0 ? `Dibintangi oleh ${escapeHtml(exp.starred_by_names)}` : 'Jadilah yang pertama memberi star';
+        const starHtml = IS_AUTHENTICATED
+            ? `<button type="button" class="button button-star${exp.is_starred ? ' is-starred' : ''}" data-action="star" data-id="${escapeHtml(exp.id)}" title="${starTitle}">
+                 <span aria-hidden="true">★</span> ${exp.is_starred ? 'Unstar' : 'Star'} <span class="star-count">${exp.star_count}</span>
+               </button>`
+            : `<a href="${LOGIN_URL}" class="button button-star" title="Login untuk memberi star">
+                 <span aria-hidden="true">★</span> Login untuk star <span class="star-count">${exp.star_count}</span>
+               </a>`;
+
+        const editHtml = (IS_SUPERUSER || IS_EDITOR)
+            ? `<a href="${expEndpoint(EDIT_EXP_ENDPOINT, escapeHtml(exp.id))}" class="button button-secondary">Edit</a>`
+            : '';
+
+        const deleteHtml = IS_SUPERUSER
+            ? `<button type="button" class="button button-danger" data-action="delete" data-id="${escapeHtml(exp.id)}">Hapus</button>`
+            : '';
+
+        article.innerHTML = `
+            ${photoHtml}
+            <div class="exp-body">
+                <span class="experience-category">${escapeHtml(exp.category_display)}</span>
+                <h2>${escapeHtml(exp.title)}</h2>
+                <p class="experience-description">${escapeHtml(exp.description)}</p>
+                <p class="experience-status">${exp.is_ongoing ? 'Sedang berlangsung' : 'Selesai'}</p>
+                <div class="experience-actions">
+                    ${starHtml}
+                    ${editHtml}
+                    ${deleteHtml}
+                </div>
+            </div>
+        `;
+        return article;
+    }
+
+    async function fetchExperiences(searchQuery = '') {
+        if (expAbortController) expAbortController.abort();
+        expAbortController = new AbortController();
+
+        try {
+            displayExpSection({ showLoading: true });
+            const url = new URL(BASE_EXP_ENDPOINT, window.location.origin);
+            if (searchQuery) url.searchParams.set('title', searchQuery);
+
+            const response = await fetch(url, {
+                headers: { Accept: 'application/json' },
+                signal: expAbortController.signal,
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const exps = await response.json();
+            expGridContainer.replaceChildren(...exps.map((exp, index) => buildExperienceCard(exp, index)));
+
+            lightboxContainer.innerHTML = exps.map((exp, index) => exp.thumbnail ? `
+                <div class="lightbox" id="exp-photo-${index}">
+                    <a href="#" class="lightbox-close">&times;</a>
+                    <img src="${escapeHtml(exp.thumbnail)}" alt="Foto ${escapeHtml(exp.title)} (besar)">
+                </div>` : ''
+            ).join('');
+
+            displayExpSection({
+                showGrid: exps.length > 0,
+                showEmpty: exps.length === 0,
+            });
+        } catch (err) {
+            if (err.name === 'AbortError') return;
+            console.error('Error loading experience:', err);
+            displayExpSection({ showError: true });
+        }
+    }
+
+    async function writeExperience(url, method, payload) {
+        const response = await fetch(url, {
+            method,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: payload === undefined ? undefined : JSON.stringify(payload),
+        });
+        if (response.status === 204) return null;
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            const msgs = Object.values(data).flat().filter(v => typeof v === 'string');
+            throw new Error(msgs.join(' ') || `Terjadi kesalahan (HTTP ${response.status}).`);
+        }
+        return data;
+    }
+
+    if (experienceForm) {
+        experienceForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = experienceForm.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            try {
+                const fd = new FormData(experienceForm);
+                const endedAt = String(fd.get('ended_at') || '').trim();
+                const payload = {
+                    title: fd.get('title'),
+                    description: fd.get('description'),
+                    category: fd.get('category'),
+                    thumbnail: fd.get('thumbnail'),
+                    ended_at: endedAt ? `${endedAt}T00:00:00` : null,
+                };
+                await writeExperience(BASE_EXP_ENDPOINT, 'POST', payload);
+                experienceForm.reset();
+                addExpModal.hidePopover();
+                showToast('Berhasil', 'Pengalaman berhasil ditambahkan!', 'success');
+                await fetchExperiences(expSearchInput.value.trim());
+            } catch (err) {
+                showToast('Gagal menambahkan pengalaman', err.message, 'error');
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    }
+
+    expGridContainer.addEventListener('click', async function(e) {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn || btn.disabled) return;
+
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        if (action === 'delete' && !window.confirm('Yakin ingin menghapus pengalaman ini?')) return;
+
+        btn.disabled = true;
+        try {
+            const pattern = action === 'star' ? STAR_EXP_ENDPOINT : DETAIL_EXP_ENDPOINT;
+            await writeExperience(expEndpoint(pattern, id), action === 'star' ? 'POST' : 'DELETE');
+            showToast('Berhasil', action === 'star' ? 'Star diperbarui.' : 'Pengalaman berhasil dihapus.', 'success');
+            await fetchExperiences(expSearchInput.value.trim());
+        } catch (err) {
+            showToast('Permintaan gagal', err.message, 'error');
+            btn.disabled = false;
+        }
+    });
+
+    expSearchInput.addEventListener('input', () => {
+        clearTimeout(expSearchDebounceTimer);
+        expSearchDebounceTimer = setTimeout(() => fetchExperiences(expSearchInput.value.trim()), SEARCH_DEBOUNCE_DELAY);
+    });
+
+    expSearchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        clearTimeout(expSearchDebounceTimer);
+        fetchExperiences(expSearchInput.value.trim());
+    });
+
+    fetchExperiences(expSearchInput.value.trim());
+</script>
 {% endblock content %}
