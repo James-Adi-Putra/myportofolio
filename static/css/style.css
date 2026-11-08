@@ -904,6 +904,7 @@ input[type="date"] {
     gap: 24px;
     opacity: 0;
     animation: frame-in 0.5s ease-out var(--edu-delay) forwards;
+    overflow: visible !important;
 }
 
 .edu-connector {
@@ -1533,5 +1534,144 @@ input[type="date"] {
     .project-delete-modal__actions .button {
         width: 100%;
         text-align: center;
+    }
+}
+
+/* ============================================
+   Cinematic Animations (Lens Focus, Tilt & Profile)
+   ============================================ */
+
+/* 1. Page Load Entrance: Camera Lens Focus & Zoom */
+body:not(.page-loaded) main {
+    opacity: 0;
+    transform: scale(0.985) translateY(10px);
+    filter: blur(5px);
+}
+
+body.page-loaded main {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+    transition:
+        opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body:not(.page-loaded) .site-header {
+    opacity: 0;
+    transform: translateY(-16px);
+}
+
+body.page-loaded .site-header {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 2. Hero Profile Interactive 3D & Focus Reticle */
+.hero-photo {
+    transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    cursor: crosshair;
+}
+
+.hero-photo:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px 4px var(--gold-soft);
+}
+
+.hero-photo:hover .avatar {
+    transform: scale(1.04);
+    filter: grayscale(0) contrast(1.1) brightness(1.02);
+}
+
+.hero-photo:hover::before,
+.hero-photo:hover::after,
+.hero-photo:hover .photo-block::before,
+.hero-photo:hover .photo-block::after {
+    border-color: var(--gold);
+    transform: scale(1.18);
+    transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Meta widgets (NPM & Program) hover glow */
+.meta-row {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.meta-row:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 14px 2px var(--gold-soft);
+    border-color: var(--gold);
+}
+
+/* Social link interactive bounce */
+.social-link {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 3. Staggered Scroll & AJAX Reveal */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(22px) scale(0.97);
+    transition:
+        opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-item.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* 4. 3D Card Tilt with Specular Lighting (Khusus project & experience, TIDAK edu-frame agar logo tidak terpotong) */
+.project-card,
+.experience-card {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+    transform-style: preserve-3d;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card.is-tilting,
+.experience-card.is-tilting {
+    transition: transform 0.08s ease-out, box-shadow 0.15s ease;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 20px 2px var(--gold-soft);
+}
+
+.project-card.is-tilting::after,
+.experience-card.is-tilting::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: radial-gradient(
+        circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(224, 164, 88, 0.12),
+        transparent 75%
+    );
+    z-index: 5;
+}
+
+/* 5. Education Frame: pastikan TIDAK di-clip dan logo selalu terlihat utuh */
+.edu-frame {
+    overflow: visible !important;
+}
+
+/* Aksesibilitas: Matikan animasi jika user memilih reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    body:not(.page-loaded) main,
+    body:not(.page-loaded) .site-header,
+    .reveal-item,
+    .hero-photo,
+    .meta-row {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
     }
 }
