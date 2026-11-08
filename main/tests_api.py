@@ -5,8 +5,145 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from main.models import Education,Project
+from main.models import Experience, Education,Project
 
+class ExperienceAPITest(APITestCase):
+    def setUp(self):
+        self.owner = User.objects.create_superuser(
+            username="owner", password="test-password", email="owner@example.com",
+        )
+        self.visitor = User.objects.create_user(
+            username="visitor", password="test-password",
+        )
+        self.editor = User.objects.create_user(
+            username="editor", password="test-password",
+        )
+        self.editor.groups.add(Group.objects.get_or_create(name="Editor")[0])
+
+        self.experience = Experience.objects.create(
+            title="Mentor PSAF",
+            description="Membimbing maba Fasilkom",
+            category="organization",
+        )
+        self.list_url = reverse("api:experience-list")
+        self.detail_url = reverse("api:experience-detail", args=[self.experience.id])
+        self.star_url = reverse("api:experience-star", args=[self.experience.id])
+        self.payload = {
+            "title": "Asisten Dosen PBP",
+            "description": "Membantu pengajaran praktikum",
+            "category": "internship",
+            "thumbnail": "https://example.com/thumb.png",
+            "ended_at": None,
+        }
+
+    def test_public_list_detail_and_search(self):
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]["id"], str(self.experience.id))
+        self.assertEqual(self.client.get(self.detail_url).status_code, status.HTTP_200_OK)
+
+        response = self.client.get(self.list_url, {"title": "MENTOR"})
+        self.assertEqual(len(response.data), 1)
+        response = self.client.get(self.list_url, {"title": "tidak-ada"})
+        self.assertEqual(response.data, [])
+
+    def test_guest_and_visitor_cannot_write(self):
+        for user in (None, self.visitor):
+            self.client.force_authenticate(user=user)
+            self.assertEqual(
+                self.client.post(self.list_url, self.payload, format="json").status_code,
+                403,
+            )
+            self.assertEqual(
+                self.client.patch(
+                    self.detail_url, {"title": "Changed"}, format="json",
+                ).status_code,
+                403,
+            )
+            self.assertEqual(self.client.delete(self.detail_url).status_code, 403)
+        self.assertEqual(Experience.objects.count(), 1)
+        self.experience.refresh_from_db()
+        self.assertEqual(self.experience.title, "Mentor PSAF")
+
+    def test_editor_can_update_but_not_create_or_delete(self):
+        self.client.force_authenticate(user=self.editor)
+        response = self.client.patch(
+            self.detail_url, {"title": "Changed"}, format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.experience.refresh_from_db()
+        self.assertEqual(self.experience.title, "Changed")
+
+        self.assertEqual(
+            self.client.post(self.list_url, self.payload, format="json").status_code,
+            403,
+        )
+        self.assertEqual(self.client.delete(self.detail_url).status_code, 403)
+        self.assertEqual(Experience.objects.count(), 1)
+
+    def test_owner_can_create_update_and_delete(self):
+        self.client.force_authenticate(user=self.owner)
+        response = self.client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Experience.objects.count(), 2)
+
+        response = self.client.patch(
+            self.detail_url, {"title": "Updated by Owner"}, format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.delete(self.detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Experience.objects.filter(pk=self.experience.id).exists())
+
+    def test_validation(self):
+        self.client.force_authenticate(user=self.owner)
+        response = self.client.post(
+            self.list_url, {**self.payload, "title": " "}, format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("title", response.data)
+
+        response = self.client.post(
+            self.list_url, {**self.payload, "description": " "}, format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("description", response.data)
+
+    def test_star_requires_login_and_toggles(self):
+        self.assertEqual(
+            self.client.post(self.star_url).status_code, status.HTTP_403_FORBIDDEN,
+        )
+        self.assertEqual(self.experience.starred_by.count(), 0)
+
+        self.client.force_authenticate(user=self.visitor)
+        response = self.client.post(self.star_url)
+        self.assertTrue(response.data["is_starred"])
+        self.assertEqual(response.data["star_count"], 1)
+
+        response = self.client.post(self.star_url)
+        self.assertFalse(response.data["is_starred"])
+        self.assertEqual(response.data["star_count"], 0)
+
+    def test_session_write_without_csrf_is_rejected(self):
+        client = APIClient(enforce_csrf_checks=True)
+        self.assertTrue(client.login(username="owner", password="test-password"))
+        response = client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Experience.objects.count(), 1)
+
+    def test_session_write_with_csrf_succeeds(self):
+        client = APIClient(enforce_csrf_checks=True)
+        client.login(username="owner", password="test-password")
+        page = client.get(self.list_url, HTTP_ACCEPT="text/html")
+        self.assertEqual(page.status_code, status.HTTP_200_OK)
+        token = client.cookies["csrftoken"].value
+        response = client.post(
+            self.list_url, self.payload, format="json", HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        
 class EducationAPITest(APITestCase):
     def setUp(self):
         self.owner = User.objects.create_superuser(
