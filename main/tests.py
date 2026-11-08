@@ -41,24 +41,31 @@ class MainTest(TestCase):
         response = self.client.get(reverse("main:show_experience"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "experience.html")
-        self.assertContains(response, self.experience.title)
-        self.assertContains(response, self.experience.description)
-        self.assertContains(response, "Organization")
-        self.assertContains(response, "Sedang berlangsung")
+        self.assertContains(response, 'id="exp-grid"')
         self.assertContains(response, f'href="{reverse("main:show_main")}"')
+
+        data = self.client.get(reverse("main:get_experience_json")).json()
+        self.assertEqual(data[0]["pk"], str(self.experience.id))
+        self.assertEqual(data[0]["fields"]["title"], self.experience.title)
+        self.assertEqual(data[0]["fields"]["description"], self.experience.description)
+        self.assertTrue(self.experience.is_ongoing)
 
     def test_empty_experience_page(self):
         Experience.objects.all().delete()
         response = self.client.get(reverse("main:show_experience"))
-        self.assertContains(response, "Belum ada pengalaman yang ditambahkan.")
+        self.assertContains(
+            response,
+            "Belum ada pengalaman yang ditambahkan atau ditemukan.",
+        )
+        data = self.client.get(reverse("main:get_experience_json")).json()
+        self.assertEqual(data, [])
 
     def test_completed_experience(self):
         self.experience.ended_at = timezone.now()
         self.experience.save()
-        response = self.client.get(reverse("main:show_experience"))
         self.assertFalse(self.experience.is_ongoing)
-        self.assertContains(response, "Selesai")
-        self.assertNotContains(response, "Sedang berlangsung")
+        data = self.client.get(reverse("main:get_experience_json")).json()
+        self.assertIsNotNone(data[0]["fields"]["ended_at"])
 
     #Education Test
     def test_education_url_is_accessible(self):
