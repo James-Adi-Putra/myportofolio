@@ -17,6 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsPortfolioOwnerOrEditorOrReadOnly])
 def experience_list(request):
+    # Mengambil daftar experience atau membuat experience baru
     if request.method in ("GET", "HEAD"):
         experiences = Experience.objects.prefetch_related("starred_by").order_by("-started_at", "id")
         title = request.query_params.get("title", "").strip()
@@ -33,6 +34,7 @@ def experience_list(request):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsPortfolioOwnerOrEditorOrReadOnly])
 def experience_detail(request, experience_id):
+    # Mengambil detail, memperbarui, atau menghapus experience
     experience = get_object_or_404(Experience.objects.prefetch_related("starred_by"), pk=experience_id)
     if request.method in ("GET", "HEAD"):
         serializer = ExperienceSerializer(experience, context={"request": request})
@@ -52,6 +54,7 @@ def experience_detail(request, experience_id):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def experience_star(request, experience_id):
+    # Memberikan atau membatalkan star pada experience
     experience = get_object_or_404(Experience, pk=experience_id)
     if experience.starred_by.filter(pk=request.user.pk).exists():
         experience.starred_by.remove(request.user)
@@ -65,6 +68,7 @@ def experience_star(request, experience_id):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsPortfolioOwnerOrEditorOrReadOnly])
 def education_list(request):
+    # Mengambil daftar education atau membuat education baru
     if request.method in ("GET", "HEAD"):
         educations = Education.objects.prefetch_related("starred_by").order_by(
             "-started_at", "id",
@@ -87,6 +91,7 @@ def education_list(request):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsPortfolioOwnerOrEditorOrReadOnly])
 def education_detail(request, education_id):
+    # Mengambil detail, memperbarui, atau menghapus education
     education = get_object_or_404(
         Education.objects.prefetch_related("starred_by"), pk=education_id,
     )
@@ -112,6 +117,7 @@ def education_detail(request, education_id):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def education_star(request, education_id):
+    # Memberikan atau membatalkan star pada education
     education = get_object_or_404(Education, pk=education_id)
 
     if education.starred_by.filter(pk=request.user.pk).exists():
@@ -127,6 +133,7 @@ def education_star(request, education_id):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsPortfolioOwnerOrReadOnly])
 def project_list(request):
+    # Mengambil daftar project atau membuat project baru
     if request.method in ("GET", "HEAD"):
         projects = Project.objects.prefetch_related("starred_by").order_by("title", "id")
         title = request.query_params.get("title", "").strip()
@@ -147,6 +154,7 @@ def project_list(request):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsPortfolioOwnerOrReadOnly])
 def project_detail(request, project_id):
+    # Mengambil detail, memperbarui, atau menghapus project
     project = get_object_or_404(
         Project.objects.prefetch_related("starred_by"), pk=project_id,
     )
@@ -172,6 +180,7 @@ def project_detail(request, project_id):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def project_star(request, project_id):
+    # Memberikan atau membatalkan star pada project
     project = get_object_or_404(Project, pk=project_id)
 
     if project.starred_by.filter(pk=request.user.pk).exists():

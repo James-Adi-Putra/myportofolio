@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from main.models import Experience, Education, Project
 
+# Serializer representasi dan validasi data Experience
 class ExperienceSerializer(serializers.ModelSerializer):
     category_display = serializers.CharField(source="get_category_display", read_only=True)
     star_count = serializers.SerializerMethodField()
@@ -42,6 +43,7 @@ class ExperienceSerializer(serializers.ModelSerializer):
         return ", ".join(user.username for user in obj.starred_by.all())
 
     
+# Serializer representasi dan validasi data Education
 class EducationSerializer(serializers.ModelSerializer):
     level_display = serializers.CharField(source="get_level_display", read_only=True)
     star_count = serializers.SerializerMethodField()
@@ -87,6 +89,7 @@ class EducationSerializer(serializers.ModelSerializer):
         return ", ".join(user.username for user in obj.starred_by.all())
 
     
+# Serializer representasi dan validasi data Project
 class ProjectSerializer(serializers.ModelSerializer):
     star_count = serializers.SerializerMethodField()
     is_starred = serializers.SerializerMethodField()
