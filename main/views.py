@@ -82,19 +82,11 @@ def get_experience_json(request):
     return HttpResponse(experience_json, content_type="application/json")
 
 def show_experience(request):
-    json_response = get_experience_json(request)
-
-    experience_entries = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-    experience_list = [entry.object for entry in experience_entries]
-
     context = {
         "name": "James",
         "brand_name": "James",
-        "experience_list": experience_list,
         "is_editor": is_editor(request.user),
+        "form": ExperienceForm(),
     }
     return render(request, "experience.html", context)
 
