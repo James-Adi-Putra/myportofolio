@@ -115,3 +115,25 @@ Saya menggunakan Claude (Anthropic) dan Deepseak sebagai bantuan dalam beberapa 
 6. Saya test end-to-end di browser, cek DevTools, cek XSS payload
 ## Refleksi Proses
 Saya menemukan route `create_education_ajax` belum terdaftar setelah AI memberi view-nya. Saya tambahkan sendiri path-nya dan memastikan import-nya lengkap. AI cenderung membuat pola baru daripada mengikuti konvensi yang sudah ada, sehingga berisiko menciptakan inkonsistensi, jadi saya berusaha untuk merefactor mandiri kali ini karena ingin belajar juga untuk persiapan kuis 2
+
+
+## Tugas 6
+1. REST adalah gaya arsitektur antarmuka perangkat lunak berbasis client-server yang seragam (uniform interface) dan stateless. Mengembalikan JSON saja belum tentu RESTful jika tidak memenuhi prinsip stateless, pemisahan resource via URI, penggunaan HTTP verb standar, dan status code semantik (Richardson Maturity Model Level 2). PUT digunakan untuk mengganti seluruh isi resource (wajib kirim semua field) sedangkan PATCH digunakan untuk modifikasi parsial (hanya field tertentu yang ingin diubah)
+2. Serializer bertindak sebagai penerjemah dua arah: mengubah objek Django ORM menjadi JSON (serialization) serta memparsing dan memvalidasi JSON dari request menjadi instance model (deserialization). Dibandingkan JsonResponse manual, ModelSerializer otomatis memetakan field model, mengotomatisasi validasi skema (unique, max_length), menyediakan fungsi create() dan update() bawaan, serta mengembalikan error 400 otomatis jika data tidak valid
+3. Autentikasi memastikan identitas pengguna (“Siapa Anda?”, menghasilkan request.user), sedangkan Otorisasi/Permission menentukan hak akses pengguna tersebut (“Apa yang boleh Anda lakukan?”). Autentikasi selalu dievaluasi lebih dulu, baru disusul otorisasi sebelum view dijalankan. Pemeriksaan wajib ada di server (backend) karena endpoint API bisa ditembak langsung (misal via cURL/Postman) tanpa melalui antarmuka HTML, menyembunyikan tombol di tampilan klien sama sekali tidak menjamin keamanan data
+4. Pada SessionAuthentication, kredensial dikirim otomatis via cookie browser sehingga rentan terhadap serangan Cross-Site Request Forgery (CSRF). Oleh sebab itu, DRF mewajibkan token CSRF (via header X-CSRFToken) pada method mutasi data (POST, PUT, PATCH, DELETE). Pada pengujian, force_authenticate dipakai untuk menyimulasikan user yang sudah login secara instan tanpa alur login nyata dan membypass validasi CSRF agar tes fokus pada logika view. Namun, cara ini tidak menguji alur pengiriman token CSRF yang sebenarnya
+## Strategi Prompting
+Saya menggunakan pendekatan mendefinisikan kebutuhan endpoint API, field serializer, dan hak akses (permission) terlebih dahulu sebelum meminta AI cek hasil kerja saya
+## AI Disclosure
+Saya menggunakan Claude sebagai bantuan dalam beberapa bagian tugas ini, dengan rincian sebagai berikut:
+1. Scaffolding awal struktur ModelSerializer dan @api_view untuk modul Education, Experience, dan Project
+2. Membantu mengimplementasikan animasi JavaScript untuk academic journey timeline dan morphing hamburger menu.
+3. Membantu refaktor dan konsolidasi style.css agar seluruh variabel warna, font, dan shadow terpusat di :root tanpa aturan redundan
+4. Meminta langkah-langkah cara bagaimana bisa melakukan test case API sebagai superuser dan user biasa
+## Bagian yang saya kerjakan sendiri :
+1. Menganalisis dan memperbaiki kegagalan 3 unit test lama (test_experience_page, test_empty_experience_page, test_completed_experience)
+2. Menemukan dan memperbaiki bug logo universitas yang terpotong akibat perubahan JS oleh AI
+3. Memutuskan desain visual keseluruhan: tema akademik journey roadmap dengan teal connector beam dan live pulse dot untuk milestone universitas yang sedang berlangsung
+4. Melakukan pengujian menyeluruh di browser (lokal) dan DevTools untuk memastikan 43 test lolos dan semua endpoint API berjalan sesuai ekspektasi
+## Refleksi Proses
+Tugas 6 membuat saya benar-benar memahami bahwa DRF bukan sekadar cara baru menulis view, melainkan pergeseran paradigma dari halaman yang dirender server menjadi API yang dikonsumsi klien, dan memahami perbedaan ini langsung terasa saat harus memperbaiki unit test lama yang asumsinya tidak lagi berlaku setelah transisi ke arsitektur asinkronus
